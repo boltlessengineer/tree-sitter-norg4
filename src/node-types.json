@@ -1,11 +1,61 @@
 [
   {
-    "type": "document",
+    "type": "_close",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "_open",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "bold",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
       "required": true,
+      "types": [
+        {
+          "type": "_close",
+          "named": true
+        },
+        {
+          "type": "_open",
+          "named": true
+        },
+        {
+          "type": "italic",
+          "named": true
+        },
+        {
+          "type": "punc",
+          "named": true
+        },
+        {
+          "type": "verbatim",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "bold_close",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "document",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
       "types": [
         {
           "type": "paragraph",
@@ -23,19 +73,23 @@
       "required": true,
       "types": [
         {
-          "type": "close",
+          "type": "_close",
           "named": true
         },
         {
-          "type": "italic",
+          "type": "_open",
           "named": true
         },
         {
-          "type": "italic_open",
+          "type": "bold",
           "named": true
         },
         {
           "type": "punc",
+          "named": true
+        },
+        {
+          "type": "verbatim",
           "named": true
         },
         {
@@ -46,11 +100,6 @@
     }
   },
   {
-    "type": "italic_open",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "paragraph",
     "named": true,
     "fields": {},
@@ -59,11 +108,19 @@
       "required": true,
       "types": [
         {
+          "type": "bold",
+          "named": true
+        },
+        {
           "type": "italic",
           "named": true
         },
         {
           "type": "punc",
+          "named": true
+        },
+        {
+          "type": "verbatim",
           "named": true
         },
         {
@@ -77,6 +134,33 @@
     "type": "punc",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "verbatim",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "_close",
+          "named": true
+        },
+        {
+          "type": "_open",
+          "named": true
+        },
+        {
+          "type": "punc",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "\u0000",
@@ -95,6 +179,10 @@
     "named": false
   },
   {
+    "type": "*",
+    "named": false
+  },
+  {
     "type": ".",
     "named": false
   },
@@ -105,10 +193,6 @@
   {
     "type": "`",
     "named": false
-  },
-  {
-    "type": "close",
-    "named": true
   },
   {
     "type": "word",

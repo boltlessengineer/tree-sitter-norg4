@@ -4,64 +4,90 @@ module.exports = grammar({
     name: 'norgtest',
     extras: (_) => [],
     inline: ($) => [
-        // punctuation
-        // $._non_ws,
     ],
     externals: ($) => [
-        $._italic_close,
     ],
     conflicts: ($) => [
-        // [$._non_ws],
-        // [$._non_ws, $.italic],
+        [$.punc, $.bold_open],
         [$.punc, $.italic_open],
-        // [$._non_ws, $._italic_inner],
-        // [$.punc, $.italic],
+        [$.punc, $.verbatim_open],
     ],
-    precedences: ($) => [
-    ],
+    precedences: ($) => [],
     rules: {
-        document: ($) => repeat1($.paragraph),
-        word: ($) => 'word',
-        paragraph: ($) => (seq(
+        document: ($) => repeat1(
             choice(
-                $._non_ws,
-                // $._ws,
-            ),
-            (newline_or_eof),
-        )),
-        punc: ($) => choice(
-            token(prec(3, seq("/", repeat1(prec(9,"/"))))),
-            '/',
-            '.',
-            "`",
-        ),
-        _non_ws: ($) => prec.right(0,
-            choice(
-                $.word,
-                $.punc,
-                $.italic,
-                // token(prec(9, seq('/', "word"))),
-                seq($._non_ws, $._non_ws),
-                seq($._non_ws, $._ws, $._non_ws),
-                // prec(1, seq($._non_ws, '/', $.word)),
+                $.paragraph,
+                newline_or_eof
             )
         ),
-        _ws: (_) => " ",
-        _italic_non_ws: ($) => prec.left(0, choice(
-            $.word,
-            $.punc,
-            // token(prec(9, seq('/', "word"))),
-            seq($._italic_non_ws, $._italic_non_ws),
-            seq($._italic_non_ws, $._ws, $._italic_non_ws),
+        word: ($) => 'word',
+        paragraph: ($) => prec.right(repeat1(
+            choice(
+                $.punc,
+                $.word,
+                $.italic,
+                $.bold,
+                $.verbatim,
+            )
         )),
-        _italic_inner: ($) => prec.dynamic(-99, $._non_ws),
-        italic_open: (_) => '/',
+        punc: ($) => choice(
+            token(prec(2, seq("*", repeat1(prec(9,"*"))))),
+            token(prec(2, seq("/", repeat1(prec(9,"/"))))),
+            token(prec(2, seq("`", repeat1(prec(9,"`"))))),
+            "*",
+            "/",
+            "`",
+            ".",
+        ),
+        bold_open: (_) => "*",
+        italic_open: (_) => "/",
+        verbatim_open: (_) => "`",
+        bold_close: (_) => prec(1, "*"),
+        italic_close: (_) => prec(1, "/"),
+        verbatim_close: (_) => prec(1, "`"),
+        bold_inner: ($) => seq(
+            prec.dynamic(0, choice(
+                seq($.punc, $.punc, $.word, $.punc),
+                $.italic,
+            )),
+            $.bold_close,
+        ),
+        // NOTE:
+        // don't touch this bold(open->inner(...->close)) approach
+        // don't even change `bold_inner` to `_bold_inner`
+        bold: ($) => prec.dynamic(1, seq(
+            alias($.bold_open, $._open),
+            repeat1(
+                choice(
+                    $.word,
+                    $.punc,
+                    $.italic,
+                    $.verbatim,
+                )
+            ),
+            alias($.bold_close, $._close),
+        )),
         italic: ($) => prec.dynamic(1, seq(
-            $.italic_open,
-            // $._italic_non_ws,
-            $._italic_inner,
-            alias($._italic_close, $.close),
-            // '/'
+            alias($.italic_open, $._open),
+            repeat1(
+                choice(
+                    $.word,
+                    $.punc,
+                    $.bold,
+                    $.verbatim,
+                )
+            ),
+            alias($.italic_close, $._close),
+        )),
+        verbatim: ($) => prec.dynamic(2, seq(
+            alias($.verbatim_open, $._open),
+            repeat1(
+                choice(
+                    $.word,
+                    $.punc,
+                )
+            ),
+            alias($.verbatim_close, $._close),
         )),
     },
 });
