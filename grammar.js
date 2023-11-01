@@ -13,7 +13,9 @@ module.exports = grammar({
     conflicts: ($) => [
         // [$._non_ws],
         // [$._non_ws, $.italic],
-        [$.punc, $.italic_open]
+        [$.punc, $.italic_open],
+        // [$._non_ws, $._italic_inner],
+        // [$.punc, $.italic],
     ],
     precedences: ($) => [
     ],
@@ -31,6 +33,7 @@ module.exports = grammar({
             token(prec(3, seq("/", repeat1(prec(9,"/"))))),
             '/',
             '.',
+            "`",
         ),
         _non_ws: ($) => prec.right(0,
             choice(
@@ -44,20 +47,21 @@ module.exports = grammar({
             )
         ),
         _ws: (_) => " ",
-        _italic_non_ws: ($) => prec.right(0, choice(
+        _italic_non_ws: ($) => prec.left(0, choice(
             $.word,
             $.punc,
             // token(prec(9, seq('/', "word"))),
             seq($._italic_non_ws, $._italic_non_ws),
             seq($._italic_non_ws, $._ws, $._italic_non_ws),
         )),
+        _italic_inner: ($) => prec.dynamic(-99, $._non_ws),
         italic_open: (_) => '/',
         italic: ($) => prec.dynamic(1, seq(
             $.italic_open,
             // $._italic_non_ws,
-            $._non_ws,
+            $._italic_inner,
             alias($._italic_close, $.close),
             // '/'
-        ))
+        )),
     },
 });

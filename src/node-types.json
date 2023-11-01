@@ -1,28 +1,5 @@
 [
   {
-    "type": "bold",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "punc",
-          "named": true
-        },
-        {
-          "type": "verbatim",
-          "named": true
-        },
-        {
-          "type": "word",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "document",
     "named": true,
     "fields": {},
@@ -46,7 +23,15 @@
       "required": true,
       "types": [
         {
-          "type": "bold",
+          "type": "close",
+          "named": true
+        },
+        {
+          "type": "italic",
+          "named": true
+        },
+        {
+          "type": "italic_open",
           "named": true
         },
         {
@@ -59,6 +44,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "italic_open",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "paragraph",
@@ -66,18 +56,14 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "bold",
+          "type": "italic",
           "named": true
         },
         {
           "type": "punc",
-          "named": true
-        },
-        {
-          "type": "verbatim",
           "named": true
         },
         {
@@ -88,27 +74,9 @@
     }
   },
   {
-    "type": "verbatim",
+    "type": "punc",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "punc",
-          "named": true
-        },
-        {
-          "type": "word",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "",
-    "named": false
+    "fields": {}
   },
   {
     "type": "\u0000",
@@ -127,11 +95,7 @@
     "named": false
   },
   {
-    "type": " ",
-    "named": false
-  },
-  {
-    "type": "*",
+    "type": ".",
     "named": false
   },
   {
@@ -143,7 +107,7 @@
     "named": false
   },
   {
-    "type": "punc",
+    "type": "close",
     "named": true
   },
   {
