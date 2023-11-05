@@ -343,11 +343,11 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "_italic_non_ws"
+                  "name": "_bold_non_ws"
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "_italic_non_ws"
+                  "name": "_bold_non_ws"
                 }
               ]
             }
@@ -360,7 +360,7 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "_italic_non_ws"
+                  "name": "_bold_non_ws"
                 },
                 {
                   "type": "SYMBOL",
@@ -368,7 +368,41 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "_italic_non_ws"
+                  "name": "_bold_non_ws"
+                }
+              ]
+            }
+          },
+          {
+            "type": "PREC_LEFT",
+            "value": 0,
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "_bold_non_ws"
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "\n"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "\r"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "\r\n"
+                    }
+                  ]
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_bold_non_ws"
                 }
               ]
             }
@@ -505,6 +539,40 @@
                 {
                   "type": "SYMBOL",
                   "name": "ws"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_italic_non_ws"
+                }
+              ]
+            }
+          },
+          {
+            "type": "PREC_LEFT",
+            "value": 0,
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "_italic_non_ws"
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "\n"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "\r"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "\r\n"
+                    }
+                  ]
                 },
                 {
                   "type": "SYMBOL",
@@ -686,41 +754,28 @@
                   "name": "_non_ws"
                 },
                 {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "\n"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "\r"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "\r\n"
+                    }
+                  ]
+                },
+                {
                   "type": "SYMBOL",
-                  "name": "_newline_non_ws"
+                  "name": "_non_ws"
                 }
               ]
             }
-          }
-        ]
-      }
-    },
-    "_newline_non_ws": {
-      "type": "PREC_LEFT",
-      "value": 0,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "\n"
-              },
-              {
-                "type": "STRING",
-                "value": "\r"
-              },
-              {
-                "type": "STRING",
-                "value": "\r\n"
-              }
-            ]
-          },
-          {
-            "type": "SYMBOL",
-            "name": "_non_ws"
           }
         ]
       }

@@ -37,6 +37,10 @@ module.exports = grammar({
             )
         ),
         word: (_) => 'word',
+        // TODO: repeated whitespace/eol
+        // regex pattern for ws+eol and ws+
+        // external scanner for preceding whitespace (to match code blocks)
+        // ㄴthis will allow preceding whitespace inside attached modifiers
         ws: (_) => ' ',
         paragraph: ($) => prec.right(1, seq(
             $._non_ws,
@@ -86,9 +90,8 @@ module.exports = grammar({
             ),
             prec.left(seq($._non_ws, $._non_ws)),
             prec.left(seq($._non_ws, $.ws, $._non_ws)),
-            prec.left(seq($._non_ws, $._newline_non_ws)),
+            prec.left(seq($._non_ws, newline, $._non_ws)),
         )),
-        _newline_non_ws: ($) => prec.left(seq(newline, $._non_ws))
     },
 });
 
@@ -107,8 +110,9 @@ function gen_attached_modifier(type, mod) {
             ),
             optional(seq($.link_modifier, $.word)),
         ),
-        prec.left(seq($._italic_non_ws, $._italic_non_ws)),
-        prec.left(seq($._italic_non_ws, $.ws, $._italic_non_ws)),
+        prec.left(seq($["_" + type + "_non_ws"], $["_" + type + "_non_ws"])),
+        prec.left(seq($["_" + type + "_non_ws"], $.ws, $["_" + type + "_non_ws"])),
+        prec.left(seq($["_" + type + "_non_ws"], newline, $["_" + type + "_non_ws"])),
     ));
     rules[type] = ($) => prec.dynamic(PREC_STANDARD_ATTACHED_MODIFIER, seq(
         $[type + "_open"],

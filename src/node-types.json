@@ -8,10 +8,6 @@
       "required": true,
       "types": [
         {
-          "type": "bold",
-          "named": true
-        },
-        {
           "type": "bold_close",
           "named": true
         },
