@@ -1,0 +1,168 @@
+================================================================================
+Standalone markup
+================================================================================
+*word*
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (bold
+      (bold_open)
+      (word)
+      (bold_close))))
+
+================================================================================
+PREC: Verbatim > nested standard markups
+================================================================================
+*/`word/*`
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (punc)
+    (punc)
+    (verbatim
+      (verbatim_open)
+      (word)
+      (punc)
+      (punc)
+      (verbatim_close))))
+
+================================================================================
+PREC: Verbatim > repeated standard markups
+================================================================================
+/`word/ /word/ /word/`
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (punc)
+    (verbatim
+      (verbatim_open)
+      (word)
+      (punc)
+      (ws)
+      (punc)
+      (word)
+      (punc)
+      (ws)
+      (punc)
+      (word)
+      (punc)
+      (verbatim_close))))
+
+================================================================================
+PREC: Unclosed verbatim with nested standard markups
+================================================================================
+*/`word/*
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (bold
+      (bold_open)
+      (italic
+        (italic_open)
+        (punc)
+        (word)
+        (italic_close))
+      (bold_close))))
+
+================================================================================
+PREC: Unclosed verbatim with repeated standard markups
+================================================================================
+/`word/ /word/ /word/
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (italic
+      (italic_open)
+      (punc)
+      (word)
+      (italic_close))
+    (ws)
+    (italic
+      (italic_open)
+      (word)
+      (italic_close))
+    (ws)
+    (italic
+      (italic_open)
+      (word)
+      (italic_close))))
+
+================================================================================
+PREC: left associated
+================================================================================
+*/word*/
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (bold
+      (bold_open)
+      (punc)
+      (word)
+      (bold_close))
+    (punc)))
+
+================================================================================
+etc
+================================================================================
+//word/
+
+word/word/
+
+word /word/
+
+/word/word/
+
+/word /word/
+
+/word//word/
+
+/word/ word/
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (punc)
+    (word)
+    (punc))
+  (paragraph
+    (word)
+    (punc)
+    (word)
+    (punc))
+  (paragraph
+    (word)
+    (ws)
+    (italic
+      (italic_open)
+      (word)
+      (italic_close)))
+  (paragraph
+    (italic
+      (italic_open)
+      (word)
+      (punc)
+      (word)
+      (italic_close)))
+  (paragraph
+    (italic
+      (italic_open)
+      (word)
+      (ws)
+      (punc)
+      (word)
+      (italic_close)))
+  (paragraph
+    (italic
+      (italic_open)
+      (word)
+      (punc)
+      (word)
+      (italic_close)))
+  (paragraph
+    (italic
+      (italic_open)
+      (word)
+      (italic_close))
+    (ws)
+    (word)
+    (punc)))
+
