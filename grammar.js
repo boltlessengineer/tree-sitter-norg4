@@ -1,3 +1,6 @@
+/// <reference types="tree-sitter-cli/dsl" />
+// @ts-check
+
 const newline = choice("\n", "\r", "\r\n");
 const newline_or_eof = choice("\n", "\r", "\r\n", "\0");
 
@@ -8,7 +11,12 @@ const ATTACHED_MODIFIERS = [
     "verbatim",
 ];
 
-const PREC_STANDARD_ATTACHED_MODIFIER = 1;
+const PREC = {
+    standard_attached_modifier: 1,
+    free_form_standard_attached_modifier: 2,
+    verbatim_attached_modifier: 3,
+    free_form_verbatim_attached_modifier: 4,
+}
 
 module.exports = grammar({
     name: 'norgtest',
@@ -95,6 +103,10 @@ module.exports = grammar({
     },
 });
 
+/**
+ * @param {string} type
+ * @param {string} mod
+ */
 function gen_attached_modifier(type, mod) {
     let rules = {};
     rules[type + "_open"] = (_) => mod;
@@ -114,7 +126,7 @@ function gen_attached_modifier(type, mod) {
         prec.left(seq($["_" + type + "_non_ws"], $.ws, $["_" + type + "_non_ws"])),
         prec.left(seq($["_" + type + "_non_ws"], newline, $["_" + type + "_non_ws"])),
     ));
-    rules[type] = ($) => prec.dynamic(PREC_STANDARD_ATTACHED_MODIFIER, seq(
+    rules[type] = ($) => prec.dynamic(PREC.standard_attached_modifier, seq(
         $[type + "_open"],
         $["_" + type + "_non_ws"],
         $[type + "_close"],
