@@ -27,6 +27,7 @@ module.exports = grammar({
         $._paragraph_break,
         $._open_conflict,
         $._close_conflict,
+        $._lookahead_word,
         $.bold_close,
         $.italic_close,
         $.verbatim_close,
@@ -35,6 +36,12 @@ module.exports = grammar({
         [$.punc, $.bold_open],
         [$.punc, $.italic_open],
         [$.punc, $.verbatim_open],
+        // NOTE: these conflicts are here to solve link_modifier cases
+        // as link modifier needs more than 1 lookahead(followed by completed markup or not,)
+        // link_modifier and punctuation should be treated as conflict cases
+        [$._non_ws],
+        [$._bold_non_ws],
+        [$._italic_non_ws],
     ],
     precedences: ($) => [],
     rules: {
@@ -84,7 +91,7 @@ module.exports = grammar({
         // e.g. case: /word /word/
         // two paragraphs have same max/sum precedence level,
         // but one starting with italic should be prioritized.
-        _non_ws: ($) => prec.right(choice(
+        _non_ws: ($) => choice(
             seq($.word, optional(alias($._open_conflict, $.punc))),
             $.punc,
             seq(
@@ -94,12 +101,12 @@ module.exports = grammar({
                     $.italic,
                     $.verbatim,
                 ),
-                optional(seq($.link_modifier, $.word)),
+                optional(seq($.link_modifier, $._lookahead_word)),
             ),
             prec.left(seq($._non_ws, $._non_ws)),
             prec.left(seq($._non_ws, $.ws, $._non_ws)),
             prec.left(seq($._non_ws, newline, $._non_ws)),
-        )),
+        ),
     },
 });
 
@@ -110,7 +117,7 @@ module.exports = grammar({
 function gen_attached_modifier(type, mod) {
     let rules = {};
     rules[type + "_open"] = (_) => mod;
-    rules["_" + type + "_non_ws"] = ($) => prec.right(choice(
+    rules["_" + type + "_non_ws"] = ($) => choice(
         seq($.word, optional(alias($._open_conflict, $.punc))),
         $.punc,
         seq(
@@ -120,12 +127,13 @@ function gen_attached_modifier(type, mod) {
                     .filter(t => t != type)
                     .map(t => $[t]),
             ),
-            optional(seq($.link_modifier, $.word)),
+            // NOTE: use zero-length token here to ensure lookahead is word while not actually consuming it
+            optional(seq($.link_modifier, $._lookahead_word)),
         ),
         prec.left(seq($["_" + type + "_non_ws"], $["_" + type + "_non_ws"])),
         prec.left(seq($["_" + type + "_non_ws"], $.ws, $["_" + type + "_non_ws"])),
         prec.left(seq($["_" + type + "_non_ws"], newline, $["_" + type + "_non_ws"])),
-    ));
+    );
     rules[type] = ($) => prec.dynamic(PREC.standard_attached_modifier, seq(
         $[type + "_open"],
         $["_" + type + "_non_ws"],

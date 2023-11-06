@@ -1,0 +1,161 @@
+================================================================================
+etc
+================================================================================
+word:word
+
+:word
+
+word:
+
+*:word*
+
+*word:*
+
+:*word*
+
+*word*:
+
+word:*
+
+*:word
+
+*:word:*
+
+word*:word
+
+word:*word
+
+word*:word:*word
+
+*word*:word
+
+word:*word*
+
+*word*:word:*word*
+
+word:*word*:word
+
+word :*word*
+
+*word*: word
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (word)
+    (punc)
+    (word))
+  (paragraph
+    (punc)
+    (word))
+  (paragraph
+    (word)
+    (punc))
+  (paragraph
+    (bold
+      (bold_open)
+      (punc)
+      (word)
+      (bold_close)))
+  (paragraph
+    (bold
+      (bold_open)
+      (word)
+      (punc)
+      (bold_close)))
+  (paragraph
+    (punc)
+    (bold
+      (bold_open)
+      (word)
+      (bold_close)))
+  (paragraph
+    (bold
+      (bold_open)
+      (word)
+      (bold_close))
+    (punc))
+  (paragraph
+    (word)
+    (punc)
+    (punc))
+  (paragraph
+    (punc)
+    (punc)
+    (word))
+  (paragraph
+    (bold
+      (bold_open)
+      (punc)
+      (word)
+      (punc)
+      (bold_close)))
+  (paragraph
+    (word)
+    (punc)
+    (punc)
+    (word))
+  (paragraph
+    (word)
+    (punc)
+    (punc)
+    (word))
+  (paragraph
+    (word)
+    (punc)
+    (punc)
+    (word)
+    (punc)
+    (punc)
+    (word))
+  (paragraph
+    (bold
+      (bold_open)
+      (word)
+      (bold_close))
+    (link_modifier)
+    (word))
+  (paragraph
+    (word)
+    (link_modifier)
+    (bold
+      (bold_open)
+      (word)
+      (bold_close)))
+  (paragraph
+    (bold
+      (bold_open)
+      (word)
+      (bold_close))
+    (link_modifier)
+    (word)
+    (link_modifier)
+    (bold
+      (bold_open)
+      (word)
+      (bold_close)))
+  (paragraph
+    (word)
+    (link_modifier)
+    (bold
+      (bold_open)
+      (word)
+      (bold_close))
+    (link_modifier)
+    (word))
+  (paragraph
+    (word)
+    (ws)
+    (punc)
+    (bold
+      (bold_open)
+      (word)
+      (bold_close)))
+  (paragraph
+    (bold
+      (bold_open)
+      (word)
+      (bold_close))
+    (punc)
+    (ws)
+    (word))
+)

@@ -9,6 +9,7 @@ enum TokenType: char {
     PARA_BREAK,
     OPEN_CONFLICT,
     CLOSE_CONFLICT,
+    LOOKAHEAD_WORD,
     BOLD_CLOSE,
     ITALIC_CLOSE,
     VERBATIM_CLOSE,
@@ -35,6 +36,14 @@ struct Scanner {
                     && !lexer->eof(lexer)) {
                     advance();
                 }
+                lexer->mark_end(lexer);
+                return true;
+            }
+        }
+        // zero-length token
+        if (valid_symbols[LOOKAHEAD_WORD]) {
+            if (!iswpunct(lexer->lookahead) && !iswspace(lexer->lookahead) && !lexer->eof(lexer)) {
+                lexer->result_symbol = LOOKAHEAD_WORD;
                 lexer->mark_end(lexer);
                 return true;
             }
