@@ -50,6 +50,7 @@ struct Scanner {
                 return false;
             }
             if(valid_symbols[token_type]) {
+                // *_close is valid
                 if(iswspace(lexer->lookahead) || iswpunct(lexer->lookahead) || lexer->eof(lexer)) {
                     lexer->result_symbol = token_type;
                     return true;
@@ -58,12 +59,9 @@ struct Scanner {
                     return true;
                 }
             } else if(valid_symbols[OPEN_CONFLICT]) {
-                if(iswspace(lexer->lookahead) || iswpunct(lexer->lookahead) || lexer->eof(lexer)) {
-                    return false;
-                } else {
-                    lexer->result_symbol = OPEN_CONFLICT;
-                    return true;
-                }
+                // *_close isn't valid
+                lexer->result_symbol = OPEN_CONFLICT;
+                return true;
             } else {
                 return false;
             }

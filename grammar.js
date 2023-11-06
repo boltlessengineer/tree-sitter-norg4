@@ -111,7 +111,7 @@ function gen_attached_modifier(type, mod) {
     let rules = {};
     rules[type + "_open"] = (_) => mod;
     rules["_" + type + "_non_ws"] = ($) => prec.right(choice(
-        $.word,
+        seq($.word, optional(alias($._open_conflict, $.punc))),
         $.punc,
         seq(
             optional(seq($.word, $.link_modifier)),

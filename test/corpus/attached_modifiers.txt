@@ -117,6 +117,14 @@ word /word/
 /word//word/
 
 /word/ word/
+
+*/word/ word*
+
+*word /word/*
+
+*/word/word*
+
+*word/word/*
 --------------------------------------------------------------------------------
 (document
   (paragraph
@@ -164,5 +172,42 @@ word /word/
       (italic_close))
     (ws)
     (word)
-    (punc)))
+    (punc))
+  (paragraph
+    (bold
+      (bold_open)
+      (italic
+        (italic_open)
+        (word)
+        (italic_close))
+      (ws)
+      (word)
+      (bold_close)))
+  (paragraph
+    (bold
+      (bold_open)
+      (word)
+      (ws)
+      (italic
+        (italic_open)
+        (word)
+        (italic_close))
+      (bold_close)))
+  (paragraph
+    (bold
+      (bold_open)
+      (punc)
+      (word)
+      (punc)
+      (word)
+      (bold_close)))
+  (paragraph
+    (bold
+      (bold_open)
+      (word)
+      (punc)
+      (word)
+      (punc)
+      (bold_close))))
+
 
