@@ -133,11 +133,16 @@ module.exports = grammar({
         ),
         _link_location: ($) => seq(
             "{",
-            optional(whitespace),
-            $._non_ws,
-            optional(whitespace),
+            $.uri_link,
             prec(1, "}")
         ),
+        uri_link: (_) =>
+            token(seq(
+                /[^\}\n\r]+/,
+                repeat(
+                    seq(newline, /[^\}\n\r]+/)
+                )
+            )),
         anchor: ($) => prec.right(seq(
             field("description", $._link_description),
             optional(field("location", $._link_location)),
