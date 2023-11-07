@@ -1,22 +1,24 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
-const newline = choice("\n", "\r", "\r\n");
-const newline_or_eof = choice("\n", "\r", "\r\n", "\0");
-
 const ATTACHED_MODIFIERS = [
     "bold",
     "italic",
 
     "verbatim",
-];
+],
 
-const PREC = {
+PREC = {
     standard_attached_modifier: 1,
     free_form_standard_attached_modifier: 2,
     verbatim_attached_modifier: 3,
     free_form_verbatim_attached_modifier: 4,
-}
+},
+
+
+newline = choice("\n", "\r", "\r\n"),
+newline_or_eof = choice("\n", "\r", "\r\n", "\0"),
+whitespace = /\p{Zs}+/;
 
 module.exports = grammar({
     name: 'norgtest',
@@ -56,7 +58,7 @@ module.exports = grammar({
         // regex pattern for ws+eol and ws+
         // external scanner for preceding whitespace (to match code blocks)
         // ㄴthis will allow preceding whitespace inside attached modifiers
-        ws: (_) => ' ',
+        ws: (_) => whitespace,
         paragraph: ($) => prec.right(1, seq(
             $._non_ws,
             $._paragraph_break,
@@ -71,6 +73,11 @@ module.exports = grammar({
             ".",
             ":",
             $._close_conflict,
+            // NOTE: should '(', '{', '[' can be parsed as punctuation?
+            "(",
+            ")",
+            "|",
+            token(/[^\n\r\p{Z}\p{L}\p{N}]/),
         ),
         link_modifier: (_) => prec.dynamic(1, ":"),
         verbatim_open: (_) => "`",
@@ -87,6 +94,28 @@ module.exports = grammar({
         )),
         ...gen_attached_modifier("bold", "*"),
         ...gen_attached_modifier("italic", "/"),
+        attached_modifier_extension: ($) =>
+            seq(
+                // token(prec(1, "(")),
+                "(",
+                optional(whitespace),
+                $.attr_pair,
+                repeat(seq(
+                    optional(whitespace),
+                    "|",
+                    optional(whitespace),
+                    $.attr_pair
+                )),
+                optional(whitespace),
+                ")",
+            ),
+        attr_pair: ($) => seq(
+            field("key", $.word),
+            optional(whitespace),
+            ":",
+            optional(whitespace),
+            field("val", $.word),
+        ),
         // NOTE: put _non_ws on bottom of list to give lowest precedence by symbol
         // e.g. case: /word /word/
         // two paragraphs have same max/sum precedence level,
@@ -96,11 +125,12 @@ module.exports = grammar({
             $.punc,
             seq(
                 optional(seq($.word, $.link_modifier)),
-                choice(
-                    $.bold,
-                    $.italic,
-                    $.verbatim,
-                ),
+                    choice(
+                        $.bold,
+                        $.italic,
+                        $.verbatim,
+                    ),
+                    optional($.attached_modifier_extension),
                 optional(seq($.link_modifier, $._lookahead_word)),
             ),
             prec.left(seq($._non_ws, $._non_ws)),

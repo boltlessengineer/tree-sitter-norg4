@@ -14,6 +14,8 @@ Standalone markup
 PREC: Verbatim > nested standard markups
 ================================================================================
 */`word/*`
+
+`*/word`/*
 --------------------------------------------------------------------------------
 (document
   (paragraph
@@ -24,7 +26,16 @@ PREC: Verbatim > nested standard markups
       (word)
       (punc)
       (punc)
-      (verbatim_close))))
+      (verbatim_close)))
+  (paragraph
+    (verbatim
+      (verbatim_open)
+      (punc)
+      (punc)
+      (word)
+      (verbatim_close))
+    (punc)
+    (punc)))
 
 ================================================================================
 PREC: Verbatim > repeated standard markups

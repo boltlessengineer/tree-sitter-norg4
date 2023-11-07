@@ -72,6 +72,7 @@ struct Scanner {
                 lexer->result_symbol = OPEN_CONFLICT;
                 return true;
             } else {
+                // TODO: when is this case..?
                 return false;
             }
         }
