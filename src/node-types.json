@@ -1,5 +1,151 @@
 [
   {
+    "type": "anchor",
+    "named": true,
+    "fields": {
+      "description": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "\n",
+            "named": false
+          },
+          {
+            "type": "\r",
+            "named": false
+          },
+          {
+            "type": "\r\n",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "anchor",
+            "named": true
+          },
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          },
+          {
+            "type": "bold",
+            "named": true
+          },
+          {
+            "type": "italic",
+            "named": true
+          },
+          {
+            "type": "link",
+            "named": true
+          },
+          {
+            "type": "link_modifier",
+            "named": true
+          },
+          {
+            "type": "o_punc",
+            "named": true
+          },
+          {
+            "type": "punc",
+            "named": true
+          },
+          {
+            "type": "verbatim",
+            "named": true
+          },
+          {
+            "type": "word",
+            "named": true
+          },
+          {
+            "type": "ws",
+            "named": true
+          }
+        ]
+      },
+      "location": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "\n",
+            "named": false
+          },
+          {
+            "type": "\r",
+            "named": false
+          },
+          {
+            "type": "\r\n",
+            "named": false
+          },
+          {
+            "type": "anchor",
+            "named": true
+          },
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          },
+          {
+            "type": "bold",
+            "named": true
+          },
+          {
+            "type": "italic",
+            "named": true
+          },
+          {
+            "type": "link",
+            "named": true
+          },
+          {
+            "type": "link_modifier",
+            "named": true
+          },
+          {
+            "type": "o_punc",
+            "named": true
+          },
+          {
+            "type": "punc",
+            "named": true
+          },
+          {
+            "type": "verbatim",
+            "named": true
+          },
+          {
+            "type": "word",
+            "named": true
+          },
+          {
+            "type": "ws",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "attached_modifier_extension",
     "named": true,
     "fields": {},
@@ -152,6 +298,152 @@
     "fields": {}
   },
   {
+    "type": "link",
+    "named": true,
+    "fields": {
+      "description": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "\n",
+            "named": false
+          },
+          {
+            "type": "\r",
+            "named": false
+          },
+          {
+            "type": "\r\n",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "anchor",
+            "named": true
+          },
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          },
+          {
+            "type": "bold",
+            "named": true
+          },
+          {
+            "type": "italic",
+            "named": true
+          },
+          {
+            "type": "link",
+            "named": true
+          },
+          {
+            "type": "link_modifier",
+            "named": true
+          },
+          {
+            "type": "o_punc",
+            "named": true
+          },
+          {
+            "type": "punc",
+            "named": true
+          },
+          {
+            "type": "verbatim",
+            "named": true
+          },
+          {
+            "type": "word",
+            "named": true
+          },
+          {
+            "type": "ws",
+            "named": true
+          }
+        ]
+      },
+      "location": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "\n",
+            "named": false
+          },
+          {
+            "type": "\r",
+            "named": false
+          },
+          {
+            "type": "\r\n",
+            "named": false
+          },
+          {
+            "type": "anchor",
+            "named": true
+          },
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          },
+          {
+            "type": "bold",
+            "named": true
+          },
+          {
+            "type": "italic",
+            "named": true
+          },
+          {
+            "type": "link",
+            "named": true
+          },
+          {
+            "type": "link_modifier",
+            "named": true
+          },
+          {
+            "type": "o_punc",
+            "named": true
+          },
+          {
+            "type": "punc",
+            "named": true
+          },
+          {
+            "type": "verbatim",
+            "named": true
+          },
+          {
+            "type": "word",
+            "named": true
+          },
+          {
+            "type": "ws",
+            "named": true
+          },
+          {
+            "type": "{",
+            "named": false
+          },
+          {
+            "type": "}",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "link_modifier",
     "named": true,
     "fields": {}
@@ -165,6 +457,10 @@
       "required": true,
       "types": [
         {
+          "type": "anchor",
+          "named": true
+        },
+        {
           "type": "attached_modifier_extension",
           "named": true
         },
@@ -177,7 +473,15 @@
           "named": true
         },
         {
+          "type": "link",
+          "named": true
+        },
+        {
           "type": "link_modifier",
+          "named": true
+        },
+        {
+          "type": "o_punc",
           "named": true
         },
         {
@@ -286,6 +590,14 @@
     "named": false
   },
   {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
     "type": "`",
     "named": false
   },
@@ -298,6 +610,10 @@
     "named": true
   },
   {
+    "type": "o_punc",
+    "named": true
+  },
+  {
     "type": "verbatim_close",
     "named": true
   },
@@ -306,7 +622,15 @@
     "named": true
   },
   {
+    "type": "{",
+    "named": false
+  },
+  {
     "type": "|",
+    "named": false
+  },
+  {
+    "type": "}",
     "named": false
   }
 ]

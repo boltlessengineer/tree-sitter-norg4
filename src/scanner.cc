@@ -69,6 +69,7 @@ struct Scanner {
                 }
             } else if(valid_symbols[OPEN_CONFLICT]) {
                 // *_close isn't valid
+                // haven't opened bold/or bold_open was parsed as punctuation
                 lexer->result_symbol = OPEN_CONFLICT;
                 return true;
             } else {

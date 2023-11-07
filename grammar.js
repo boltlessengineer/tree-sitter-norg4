@@ -58,7 +58,7 @@ module.exports = grammar({
         // regex pattern for ws+eol and ws+
         // external scanner for preceding whitespace (to match code blocks)
         // ㄴthis will allow preceding whitespace inside attached modifiers
-        ws: (_) => whitespace,
+        ws: (_) => prec(-1, whitespace),
         paragraph: ($) => prec.right(1, seq(
             $._non_ws,
             $._paragraph_break,
@@ -77,7 +77,9 @@ module.exports = grammar({
             "(",
             ")",
             "|",
-            token(/[^\n\r\p{Z}\p{L}\p{N}]/),
+            "}",
+            "]",
+            token(/[^\{\[\n\r\p{Z}\p{L}\p{N}]/),
         ),
         link_modifier: (_) => prec.dynamic(1, ":"),
         verbatim_open: (_) => "`",
@@ -89,6 +91,8 @@ module.exports = grammar({
         _verbatim_non_ws: ($) => prec.right(choice(
             $.word,
             $.punc,
+            "[",
+            "{",
             prec.left(seq($._verbatim_non_ws, $._verbatim_non_ws)),
             prec.left(seq($._verbatim_non_ws, $.ws, $._verbatim_non_ws)),
         )),
@@ -116,6 +120,28 @@ module.exports = grammar({
             optional(whitespace),
             field("val", $.word),
         ),
+        _link_description: ($) => seq(
+            "[",
+            optional(whitespace),
+            $._non_ws,
+            optional(whitespace),
+            prec(1, "]")
+        ),
+        _link_location: ($) => seq(
+            "{",
+            optional(whitespace),
+            $._non_ws,
+            optional(whitespace),
+            prec(1, "}")
+        ),
+        anchor: ($) => prec.right(seq(
+            field("description", $._link_description),
+            optional(field("location", $._link_location)),
+        )),
+        link: ($) => prec.right(seq(
+            field("location", $._link_location),
+            optional(field("description", $._link_description)),
+        )),
         // NOTE: put _non_ws on bottom of list to give lowest precedence by symbol
         // e.g. case: /word /word/
         // two paragraphs have same max/sum precedence level,
@@ -133,6 +159,8 @@ module.exports = grammar({
                     optional($.attached_modifier_extension),
                 optional(seq($.link_modifier, $._lookahead_word)),
             ),
+            $.anchor,
+            $.link,
             prec.left(seq($._non_ws, $._non_ws)),
             prec.left(seq($._non_ws, $.ws, $._non_ws)),
             prec.left(seq($._non_ws, newline, $._non_ws)),
