@@ -44,6 +44,10 @@ module.exports = grammar({
         [$._non_ws],
         [$._bold_non_ws],
         [$._italic_non_ws],
+        // NOTE: and these are for not making ERROR with unclosed
+        // attached_modifier_extensions
+        [$.bold],
+        [$.italic],
     ],
     precedences: ($) => [],
     rules: {
@@ -151,12 +155,11 @@ module.exports = grammar({
             $.punc,
             seq(
                 optional(seq($.word, $.link_modifier)),
-                    choice(
-                        $.bold,
-                        $.italic,
-                        $.verbatim,
-                    ),
-                    optional($.attached_modifier_extension),
+                choice(
+                    $.bold,
+                    $.italic,
+                    $.verbatim,
+                ),
                 optional(seq($.link_modifier, $._lookahead_word)),
             ),
             $.anchor,
@@ -192,10 +195,14 @@ function gen_attached_modifier(type, mod) {
         prec.left(seq($["_" + type + "_non_ws"], $.ws, $["_" + type + "_non_ws"])),
         prec.left(seq($["_" + type + "_non_ws"], newline, $["_" + type + "_non_ws"])),
     );
-    rules[type] = ($) => prec.dynamic(PREC.standard_attached_modifier, seq(
+    rules["_" + type] = ($) => prec.dynamic(PREC.standard_attached_modifier, seq(
         $[type + "_open"],
         $["_" + type + "_non_ws"],
         $[type + "_close"],
-    ))
+    ));
+    rules[type] = ($) => seq(
+        $["_" + type],
+        optional($.attached_modifier_extension),
+    );
     return rules;
 }

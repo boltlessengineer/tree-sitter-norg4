@@ -190,6 +190,13 @@
         {
           "type": "STRING",
           "value": "]"
+        },
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[^\\{\\[\\n\\r\\p{Z}\\p{L}\\p{N}]"
+          }
         }
       ]
     },
@@ -460,7 +467,7 @@
         }
       ]
     },
-    "bold": {
+    "_bold": {
       "type": "PREC_DYNAMIC",
       "value": 1,
       "content": {
@@ -480,6 +487,27 @@
           }
         ]
       }
+    },
+    "bold": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_bold"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "attached_modifier_extension"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
     },
     "italic_open": {
       "type": "STRING",
@@ -652,7 +680,7 @@
         }
       ]
     },
-    "italic": {
+    "_italic": {
       "type": "PREC_DYNAMIC",
       "value": 1,
       "content": {
@@ -672,6 +700,27 @@
           }
         ]
       }
+    },
+    "italic": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_italic"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "attached_modifier_extension"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
     },
     "attached_modifier_extension": {
       "type": "SEQ",
@@ -802,23 +851,6 @@
           }
         }
       ]
-    },
-    "bold_att": {
-      "type": "PREC_RIGHT",
-      "value": 0,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "bold"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "attached_modifier_extension"
-          }
-        ]
-      }
     },
     "_link_description": {
       "type": "SEQ",
@@ -996,7 +1028,7 @@
                     "name": "_open_conflict"
                   },
                   "named": true,
-                  "value": "o_punc"
+                  "value": "punc"
                 },
                 {
                   "type": "BLANK"
@@ -1047,18 +1079,6 @@
                 {
                   "type": "SYMBOL",
                   "name": "verbatim"
-                }
-              ]
-            },
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "attached_modifier_extension"
-                },
-                {
-                  "type": "BLANK"
                 }
               ]
             },
@@ -1190,6 +1210,12 @@
     ],
     [
       "_italic_non_ws"
+    ],
+    [
+      "bold"
+    ],
+    [
+      "italic"
     ]
   ],
   "precedences": [],

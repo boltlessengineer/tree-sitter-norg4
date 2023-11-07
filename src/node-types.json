@@ -32,10 +32,6 @@
             "named": true
           },
           {
-            "type": "attached_modifier_extension",
-            "named": true
-          },
-          {
             "type": "bold",
             "named": true
           },
@@ -49,10 +45,6 @@
           },
           {
             "type": "link_modifier",
-            "named": true
-          },
-          {
-            "type": "o_punc",
             "named": true
           },
           {
@@ -94,10 +86,6 @@
             "named": true
           },
           {
-            "type": "attached_modifier_extension",
-            "named": true
-          },
-          {
             "type": "bold",
             "named": true
           },
@@ -111,10 +99,6 @@
           },
           {
             "type": "link_modifier",
-            "named": true
-          },
-          {
-            "type": "o_punc",
             "named": true
           },
           {
@@ -195,6 +179,10 @@
       "required": true,
       "types": [
         {
+          "type": "attached_modifier_extension",
+          "named": true
+        },
+        {
           "type": "bold_close",
           "named": true
         },
@@ -257,6 +245,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "attached_modifier_extension",
+          "named": true
+        },
         {
           "type": "bold",
           "named": true
@@ -330,10 +322,6 @@
             "named": true
           },
           {
-            "type": "attached_modifier_extension",
-            "named": true
-          },
-          {
             "type": "bold",
             "named": true
           },
@@ -347,10 +335,6 @@
           },
           {
             "type": "link_modifier",
-            "named": true
-          },
-          {
-            "type": "o_punc",
             "named": true
           },
           {
@@ -392,10 +376,6 @@
             "named": true
           },
           {
-            "type": "attached_modifier_extension",
-            "named": true
-          },
-          {
             "type": "bold",
             "named": true
           },
@@ -409,10 +389,6 @@
           },
           {
             "type": "link_modifier",
-            "named": true
-          },
-          {
-            "type": "o_punc",
             "named": true
           },
           {
@@ -461,10 +437,6 @@
           "named": true
         },
         {
-          "type": "attached_modifier_extension",
-          "named": true
-        },
-        {
           "type": "bold",
           "named": true
         },
@@ -478,10 +450,6 @@
         },
         {
           "type": "link_modifier",
-          "named": true
-        },
-        {
-          "type": "o_punc",
           "named": true
         },
         {
@@ -607,10 +575,6 @@
   },
   {
     "type": "italic_close",
-    "named": true
-  },
-  {
-    "type": "o_punc",
     "named": true
   },
   {
