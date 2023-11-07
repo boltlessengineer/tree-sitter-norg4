@@ -136,6 +136,8 @@ word /word/
 */word/word*
 
 *word/word/*
+
+/*word *word*/
 --------------------------------------------------------------------------------
 (document
   (paragraph
@@ -219,6 +221,15 @@ word /word/
       (punc)
       (word)
       (punc)
-      (bold_close))))
-
-
+      (bold_close)))
+  (paragraph
+    (italic
+      (italic_open)
+      (bold
+        (bold_open)
+        (word)
+        (ws)
+        (punc)
+        (word)
+        (bold_close))
+      (italic_close))))
