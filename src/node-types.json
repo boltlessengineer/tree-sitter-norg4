@@ -14,20 +14,12 @@
         ]
       },
       "location": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
             "type": "uri_link",
             "named": true
-          },
-          {
-            "type": "{",
-            "named": false
-          },
-          {
-            "type": "}",
-            "named": false
           }
         ]
       }
@@ -208,20 +200,12 @@
         ]
       },
       "location": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
             "type": "uri_link",
             "named": true
-          },
-          {
-            "type": "{",
-            "named": false
-          },
-          {
-            "type": "}",
-            "named": false
           }
         ]
       }

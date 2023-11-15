@@ -134,7 +134,19 @@ module.exports = grammar({
         ),
         _link_location: ($) => seq(
             "{",
-            $.uri_link,
+            field("location",
+                choice(
+                    // seq(
+                    //     $.file_loc,
+                    //     optional(
+                    //         choice(
+                    //             // TODO:
+                    //         )
+                    //     )
+                    // ),
+                    $.uri_link,
+                ),
+            ),
             prec(1, "}")
         ),
         uri_link: (_) =>
@@ -144,12 +156,17 @@ module.exports = grammar({
                     seq(newline, /[^\}\n\r]+/)
                 )
             )),
+        file_loc: (_) => seq(
+            token(prec(1, ":")),
+            /[^:\S]+/,
+            ":",
+        ),
         anchor: ($) => prec.right(seq(
             field("description", $.link_description),
-            optional(field("location", $._link_location)),
+            optional($._link_location),
         )),
         link: ($) => prec.right(seq(
-            field("location", $._link_location),
+            $._link_location,
             optional(field("description", $.link_description)),
         )),
         // NOTE: put _non_ws on bottom of list to give lowest precedence by symbol
