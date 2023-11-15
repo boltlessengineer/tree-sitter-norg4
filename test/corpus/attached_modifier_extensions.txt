@@ -1,0 +1,35 @@
+================================================================================
+Single attached modifier extension
+================================================================================
+*word*(word:word)
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (bold
+      (bold_open)
+      (word)
+      (bold_close)
+      (attached_modifier_extension
+        (attr_pair
+          (word)
+          (word))))))
+
+================================================================================
+Multiple attached modifier extension
+================================================================================
+*word*(word:word|word:word)
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (bold
+      (bold_open)
+      (word)
+      (bold_close)
+      (attached_modifier_extension
+        (attr_pair
+          (word)
+          (word))
+        (attr_pair
+          (word)
+          (word))))))
+
