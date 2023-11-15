@@ -4,7 +4,8 @@
 const ATTACHED_MODIFIERS = [
     "bold",
     "italic",
-
+],
+VERBATIM_ATTACHED_MODIFIERS = [
     "verbatim",
 ],
 
@@ -23,8 +24,7 @@ whitespace = /\p{Zs}+/;
 module.exports = grammar({
     name: 'norgtest',
     extras: (_) => [],
-    inline: ($) => [
-    ],
+    inline: (_) => [],
     externals: ($) => [
         $._paragraph_break,
         $._open_conflict,
@@ -44,12 +44,14 @@ module.exports = grammar({
         [$._non_ws],
         [$._bold_non_ws],
         [$._italic_non_ws],
-        // NOTE: and these are for not making ERROR with unclosed
+        // NOTE: and these are for NOT making ERROR with unclosed
         // attached_modifier_extensions
+        // unclosed attached_modifier_extensions should not be ERROR because
+        // otherwise, parser will fallback to pure punctuations
         [$.bold],
         [$.italic],
     ],
-    precedences: ($) => [],
+    precedences: () => [],
     rules: {
         document: ($) => repeat(
             choice(
@@ -77,7 +79,7 @@ module.exports = grammar({
             ".",
             ":",
             $._close_conflict,
-            // NOTE: should '(', '{', '[' can be parsed as punctuation?
+            // NOTE: only `(` can be parsed as punctuation and not `{`, `[`
             "(",
             ")",
             "|",
@@ -95,8 +97,8 @@ module.exports = grammar({
         _verbatim_non_ws: ($) => prec.right(choice(
             $.word,
             $.punc,
-            "[",
-            "{",
+            alias("[", $.punc),
+            alias("{", $.punc),
             prec.left(seq($._verbatim_non_ws, $._verbatim_non_ws)),
             prec.left(seq($._verbatim_non_ws, $.ws, $._verbatim_non_ws)),
         )),
@@ -104,7 +106,6 @@ module.exports = grammar({
         ...gen_attached_modifier("italic", "/"),
         attached_modifier_extension: ($) =>
             seq(
-                // token(prec(1, "(")),
                 "(",
                 optional(whitespace),
                 $.attr_pair,
@@ -124,7 +125,7 @@ module.exports = grammar({
             optional(whitespace),
             field("val", $.word),
         ),
-        _link_description: ($) => seq(
+        link_description: ($) => seq(
             "[",
             optional(whitespace),
             $._non_ws,
@@ -144,12 +145,12 @@ module.exports = grammar({
                 )
             )),
         anchor: ($) => prec.right(seq(
-            field("description", $._link_description),
+            field("description", $.link_description),
             optional(field("location", $._link_location)),
         )),
         link: ($) => prec.right(seq(
             field("location", $._link_location),
-            optional(field("description", $._link_description)),
+            optional(field("description", $.link_description)),
         )),
         // NOTE: put _non_ws on bottom of list to give lowest precedence by symbol
         // e.g. case: /word /word/
@@ -161,9 +162,10 @@ module.exports = grammar({
             seq(
                 optional(seq($.word, $.link_modifier)),
                 choice(
-                    $.bold,
-                    $.italic,
-                    $.verbatim,
+                    ...ATTACHED_MODIFIERS
+                        .map(t => $[t]),
+                    ...VERBATIM_ATTACHED_MODIFIERS
+                        .map(t => $[t]),
                 ),
                 optional(seq($.link_modifier, $._lookahead_word)),
             ),
@@ -181,6 +183,9 @@ module.exports = grammar({
  * @param {string} mod
  */
 function gen_attached_modifier(type, mod) {
+    /** 
+    * @type {RuleBuilders<string, string>} 
+    */ 
     let rules = {};
     rules[type + "_open"] = (_) => mod;
     rules["_" + type + "_non_ws"] = ($) => choice(
@@ -192,22 +197,22 @@ function gen_attached_modifier(type, mod) {
                 ...ATTACHED_MODIFIERS
                     .filter(t => t != type)
                     .map(t => $[t]),
+                ...VERBATIM_ATTACHED_MODIFIERS
+                    .filter(t => t != type)
+                    .map(t => $[t]),
             ),
-            // NOTE: use zero-length token here to ensure lookahead is word while not actually consuming it
+            // NOTE: use zero-length token here to ensure lookahead is word without actually consuming it
             optional(seq($.link_modifier, $._lookahead_word)),
         ),
         prec.left(seq($["_" + type + "_non_ws"], $["_" + type + "_non_ws"])),
         prec.left(seq($["_" + type + "_non_ws"], $.ws, $["_" + type + "_non_ws"])),
         prec.left(seq($["_" + type + "_non_ws"], newline, $["_" + type + "_non_ws"])),
     );
-    rules["_" + type] = ($) => prec.dynamic(PREC.standard_attached_modifier, seq(
+    rules[type] = ($) => prec.dynamic(PREC.standard_attached_modifier, seq(
         $[type + "_open"],
         $["_" + type + "_non_ws"],
         $[type + "_close"],
-    ));
-    rules[type] = ($) => seq(
-        $["_" + type],
         optional($.attached_modifier_extension),
-    );
+    ));
     return rules;
 }

@@ -1,0 +1,5 @@
+root = true
+
+[*]
+auto_format = false
+tab_size = 4

@@ -1,15 +1,20 @@
 {
-  "name": "tree-sitter-test",
-  "version": "1.0.0",
-  "description": "",
-  "main": "bindings/node",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "tree-sitter-cli": "^0.20.8"
-  }
+    "name": "tree-sitter-test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "bindings/node",
+    "scripts": {
+        "test": "./tree-sitter-patch generate && ./tree-sitter-patch test",
+        "parse": "./tree-sitter-patch generate && ./tree-sitter-patch parse"
+    },
+    "keywords": [
+        "tree-sitter",
+        "neorg",
+        "norg"
+    ],
+    "author": "boltlessengineer",
+    "license": "ISC",
+    "devDependencies": {
+        "tree-sitter-cli": "^0.20.8"
+    }
 }
