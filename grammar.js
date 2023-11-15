@@ -5,21 +5,21 @@ const ATTACHED_MODIFIERS = [
     "bold",
     "italic",
 ],
-VERBATIM_ATTACHED_MODIFIERS = [
-    "verbatim",
-],
+    VERBATIM_ATTACHED_MODIFIERS = [
+        "verbatim",
+    ],
 
-PREC = {
-    standard_attached_modifier: 1,
-    free_form_standard_attached_modifier: 2,
-    verbatim_attached_modifier: 3,
-    free_form_verbatim_attached_modifier: 4,
-},
+    PREC = {
+        standard_attached_modifier: 1,
+        free_form_standard_attached_modifier: 2,
+        verbatim_attached_modifier: 3,
+        free_form_verbatim_attached_modifier: 4,
+    },
 
 
-newline = choice("\n", "\r", "\r\n"),
-newline_or_eof = choice("\n", "\r", "\r\n", "\0"),
-whitespace = /\p{Zs}+/;
+    newline = choice("\n", "\r", "\r\n"),
+    newline_or_eof = choice("\n", "\r", "\r\n", "\0"),
+    whitespace = /\p{Zs}+/;
 
 module.exports = grammar({
     name: 'norgtest',
@@ -70,9 +70,9 @@ module.exports = grammar({
             $._paragraph_break,
         )),
         punc: ($) => choice(
-            token(prec(2, seq("*", repeat1(prec(9,"*"))))),
-            token(prec(2, seq("/", repeat1(prec(9,"/"))))),
-            token(prec(2, seq("`", repeat1(prec(9,"`"))))),
+            token(prec(2, seq("*", repeat1(prec(9, "*"))))),
+            token(prec(2, seq("/", repeat1(prec(9, "/"))))),
+            token(prec(2, seq("`", repeat1(prec(9, "`"))))),
             "*",
             "/",
             "`",
@@ -183,9 +183,9 @@ module.exports = grammar({
  * @param {string} mod
  */
 function gen_attached_modifier(type, mod) {
-    /** 
-    * @type {RuleBuilders<string, string>} 
-    */ 
+    /**
+     * @type {RuleBuilders<string, string>}
+     */
     let rules = {};
     rules[type + "_open"] = (_) => mod;
     rules["_" + type + "_non_ws"] = ($) => choice(
