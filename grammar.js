@@ -4,9 +4,11 @@
 const ATTACHED_MODIFIERS = [
     "bold",
     "italic",
+    // TODO: add more
 ],
     VERBATIM_ATTACHED_MODIFIERS = [
         "verbatim",
+        // TODO: add more
     ],
 
     PREC = {
@@ -16,17 +18,20 @@ const ATTACHED_MODIFIERS = [
         free_form_verbatim_attached_modifier: 4,
     },
 
-
-    newline = choice("\n", "\r", "\r\n"),
-    newline_or_eof = choice("\n", "\r", "\r\n", "\0"),
-    whitespace = /\p{Zs}+/;
+    word = /[\p{L}\p{N}]+/,
+    whitespace = /\p{Zs}+/,
+    newline = choice("\n", "\r", "\r\n");
 
 module.exports = grammar({
     name: 'norgtest',
-    extras: (_) => [],
+    extras: ($) => [
+        $._preceding_whitespace,
+    ],
     inline: (_) => [],
     externals: ($) => [
-        $._paragraph_break,
+        $._preceding_whitespace,
+        // NOTE: EOF is handled by external scanner because it can be 0 or NUL
+        $._eof,
         $._open_conflict,
         $._close_conflict,
         $._lookahead_word,
@@ -53,22 +58,34 @@ module.exports = grammar({
     ],
     precedences: () => [],
     rules: {
-        document: ($) => repeat(
-            choice(
-                $.paragraph,
-                newline_or_eof
-            )
+        document: ($) => seq(
+            repeat(
+                choice(
+                    $.paragraph,
+                    $.test_heading,
+                    newline,
+                ),
+            ),
         ),
-        word: (_) => 'word',
-        // TODO: repeated whitespace/eol
-        // regex pattern for ws+eol and ws+
-        // external scanner for preceding whitespace (to match code blocks)
-        // ㄴthis will allow preceding whitespace inside attached modifiers
+        word: (_) => word,
         ws: (_) => prec(-1, whitespace),
+        soft_break: (_) => seq(optional(whitespace), newline),
+        _multi_break: (_) => prec(1, seq(
+            optional(whitespace),
+            newline,
+            repeat1(newline)
+        )),
         paragraph: ($) => prec.right(1, seq(
             $._non_ws,
-            $._paragraph_break,
+            choice(
+                prec(-1, alias($.soft_break, "_paragraph_break")),
+                $._eof,
+            ),
         )),
+        test_heading: ($) => seq(
+            token(prec(10, "* ")),
+            $.word,
+        ),
         punc: ($) => choice(
             token(prec(2, seq("*", repeat1(prec(9, "*"))))),
             token(prec(2, seq("/", repeat1(prec(9, "/"))))),
@@ -101,6 +118,7 @@ module.exports = grammar({
             alias("{", $.punc),
             prec.left(seq($._verbatim_non_ws, $._verbatim_non_ws)),
             prec.left(seq($._verbatim_non_ws, $.ws, $._verbatim_non_ws)),
+            prec.left(seq($._verbatim_non_ws, $.soft_break, $._verbatim_non_ws)),
         )),
         ...gen_attached_modifier("bold", "*"),
         ...gen_attached_modifier("italic", "/"),
@@ -190,7 +208,7 @@ module.exports = grammar({
             $.link,
             prec.left(seq($._non_ws, $._non_ws)),
             prec.left(seq($._non_ws, $.ws, $._non_ws)),
-            prec.left(seq($._non_ws, newline, $._non_ws)),
+            prec.left(seq($._non_ws, $.soft_break, $._non_ws)),
         ),
     },
 });
@@ -223,7 +241,7 @@ function gen_attached_modifier(type, mod) {
         ),
         prec.left(seq($["_" + type + "_non_ws"], $["_" + type + "_non_ws"])),
         prec.left(seq($["_" + type + "_non_ws"], $.ws, $["_" + type + "_non_ws"])),
-        prec.left(seq($["_" + type + "_non_ws"], newline, $["_" + type + "_non_ws"])),
+        prec.left(seq($["_" + type + "_non_ws"], $.soft_break, $["_" + type + "_non_ws"])),
     );
     rules[type] = ($) => prec.dynamic(PREC.standard_attached_modifier, seq(
         $[type + "_open"],

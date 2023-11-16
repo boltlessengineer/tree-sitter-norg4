@@ -6,7 +6,8 @@
 using namespace std;
 
 enum TokenType: char {
-    PARA_BREAK,
+    PRE_WHITESPACE,
+    END_OF_FILE,
     OPEN_CONFLICT,
     CLOSE_CONFLICT,
     LOOKAHEAD_WORD,
@@ -24,18 +25,16 @@ struct Scanner {
         attached_modifiers['`'] = VERBATIM_CLOSE;
     }
     bool scan(const bool *valid_symbols) {
-        if (valid_symbols[PARA_BREAK]) {
-            // TODO: more precise paragraph break parsing
-            lexer->result_symbol = PARA_BREAK;
+        if (lexer->eof(lexer) && valid_symbols[END_OF_FILE]) {
+            lexer->result_symbol = END_OF_FILE;
             lexer->mark_end(lexer);
-            if (lexer->eof(lexer)) return true;
-            if (lexer->lookahead == '\n') {
-                advance();
-                while ((lexer->lookahead == '\n'
-                    || lexer->lookahead == '\0')
-                    && !lexer->eof(lexer)) {
+            return true;
+        }
+        if (lexer->get_column(lexer) == 0) {
+            if (iswblank(lexer->lookahead)) {
+                while (iswblank(lexer->lookahead)) 
                     advance();
-                }
+                lexer->result_symbol = PRE_WHITESPACE;
                 lexer->mark_end(lexer);
                 return true;
             }
