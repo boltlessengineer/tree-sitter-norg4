@@ -1,9 +1,10 @@
 {
-    "name": "tree-sitter-test",
-    "version": "1.0.0",
-    "description": "",
+    "name": "tree-sitter-norg4",
+    "version": "0.0.1",
+    "description": "tree-sitter parser for Norg format",
     "main": "bindings/node",
     "scripts": {
+        "generate": "./tree-sitter-patch generate",
         "test": "./tree-sitter-patch generate && ./tree-sitter-patch test",
         "parse": "./tree-sitter-patch generate && ./tree-sitter-patch parse"
     },
