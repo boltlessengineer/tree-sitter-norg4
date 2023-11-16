@@ -2,4 +2,4 @@ root = true
 
 [*]
 auto_format = false
-tab_size = 4
+indent_size = 4
