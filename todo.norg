@@ -1,2 +1,29 @@
-- ( ) retry link modifiers without conflict cases...
-  think it like conflict case between `bold_open` and `punc`
+- ( ) paragraph
+-- (x) paragraph break
+-- ( ) attached modifiers
+--- (x) standard
+---- (x) attached modifier extension
+--- (x) verbatim
+--- (x) link modifier
+--- (x) free-form
+---- (x) attached modifier extension
+--- ( ) verbatim free-form
+---- ( ) attached modifier extension
+-- ( ) linkables
+--- (x) basic anchor & link
+--- ( ) detailed CST for location information
+- (=) block types
+
+* NOTES
+
+free-form attached modifiers can start/end with EOL char.
+otherwise, parser will reasonably fallback to non-free-form
+
+@code
+*|
+this is not bold but free-form bold|*
+
+*|
+this is not bold but free-form bold
+|*
+@end

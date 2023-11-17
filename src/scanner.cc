@@ -13,6 +13,10 @@ enum TokenType: char {
     LOOKAHEAD_WORD,
     BOLD_CLOSE,
     ITALIC_CLOSE,
+    UNDERLINE_CLOSE,
+    FREE_BOLD_CLOSE,
+    FREE_ITALIC_CLOSE,
+    FREE_UNDERLINE_CLOSE,
     VERBATIM_CLOSE,
 };
 
@@ -22,6 +26,7 @@ struct Scanner {
     Scanner() {
         attached_modifiers['*'] = BOLD_CLOSE;
         attached_modifiers['/'] = ITALIC_CLOSE;
+        attached_modifiers['_'] = UNDERLINE_CLOSE;
         attached_modifiers['`'] = VERBATIM_CLOSE;
     }
     bool scan(const bool *valid_symbols) {
@@ -47,6 +52,11 @@ struct Scanner {
                 return true;
             }
         }
+        bool is_free_close = false;
+        if (lexer->lookahead == '|') {
+            advance();
+            is_free_close = true;
+        }
         std::unordered_map<int32_t, TokenType>::iterator iter = attached_modifiers.find(lexer->lookahead);
         if (iter != attached_modifiers.end()) {
             const int token_char = iter->first;
@@ -57,10 +67,16 @@ struct Scanner {
                 // repeated modifiers are handled by grammar.js
                 return false;
             }
-            if(valid_symbols[token_type]) {
+            if(valid_symbols[token_type] || valid_symbols[token_type + (FREE_BOLD_CLOSE - BOLD_CLOSE)]) {
                 // *_close is valid
                 if(iswspace(lexer->lookahead) || iswpunct(lexer->lookahead) || lexer->eof(lexer)) {
                     lexer->result_symbol = token_type;
+                    if (is_free_close) {
+                        lexer->result_symbol += (FREE_BOLD_CLOSE - BOLD_CLOSE);
+                    }
+                    // check if FREE_*_CLOSE is valid
+                    if (!valid_symbols[lexer->result_symbol])
+                        return false;
                     return true;
                 } else {
                     lexer->result_symbol = CLOSE_CONFLICT;

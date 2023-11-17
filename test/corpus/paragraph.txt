@@ -85,7 +85,7 @@ word
     (word)))
 
 ================================================================================
-Paragraph break by Structural modifier
+Paragraph break by Detached modifier
 ================================================================================
 word word
 * heading
@@ -96,4 +96,41 @@ word word
     (ws)
     (word))
   (test_heading
-    (word)))
+    (title
+      (word))))
+
+================================================================================
+Paragraph break by Detached modifier (with standard Attached modifier)
+================================================================================
+*not
+* heading
+bold*
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (punc)
+    (word))
+  (test_heading
+    (title
+      (word)))
+  (paragraph
+    (word)
+    (punc)))
+
+================================================================================
+Paragraph break by Detached modifier (with verbatim Attached modifier)
+================================================================================
+`not
+* heading
+verbatim`
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (punc)
+    (word))
+  (test_heading
+    (title
+      (word)))
+  (paragraph
+    (word)
+    (punc)))

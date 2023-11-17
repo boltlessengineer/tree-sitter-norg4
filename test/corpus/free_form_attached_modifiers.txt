@@ -1,0 +1,197 @@
+================================================================================
+Standalone free form attached modifier
+================================================================================
+*|word|*
+
+*| word|*
+
+*|word |*
+
+*| word |*
+
+*|
+word|*
+
+*|word
+|*
+
+*|
+word
+|*
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (free_bold
+      (free_bold_open)
+      (word)
+      (free_bold_close)))
+  (paragraph
+    (free_bold
+      (free_bold_open)
+      (ws)
+      (word)
+      (free_bold_close)))
+  (paragraph
+    (free_bold
+      (free_bold_open)
+      (word)
+      (ws)
+      (free_bold_close)))
+  (paragraph
+    (free_bold
+      (free_bold_open)
+      (ws)
+      (word)
+      (ws)
+      (free_bold_close)))
+  (paragraph
+    (free_bold
+      (free_bold_open)
+      (soft_break)
+      (word)
+      (free_bold_close)))
+  (paragraph
+    (free_bold
+      (free_bold_open)
+      (word)
+      (soft_break)
+      (free_bold_close)))
+  (paragraph
+    (free_bold
+      (free_bold_open)
+      (soft_break)
+      (word)
+      (soft_break)
+      (free_bold_close))))
+
+================================================================================
+PREC: Verbatim > nested standard markups (inside free-form markups)
+================================================================================
+_|*/`word/*`|_
+
+_|`*/word`/*|_
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (free_underline
+      (free_underline_open)
+      (punc)
+      (punc)
+      (verbatim
+        (verbatim_open)
+        (word)
+        (punc)
+        (punc)
+        (verbatim_close))
+      (free_underline_close)))
+  (paragraph
+    (free_underline
+      (free_underline_open)
+      (verbatim
+        (verbatim_open)
+        (punc)
+        (punc)
+        (word)
+        (verbatim_close))
+      (punc)
+      (punc)
+      (free_underline_close))))
+
+================================================================================
+Unclosed free form markup
+================================================================================
+*| word
+
+/| word
+_| word
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (punc)
+    (punc)
+    (ws)
+    (word))
+  (paragraph
+    (punc)
+    (punc)
+    (ws)
+    (word)
+    (soft_break)
+    (punc)
+    (punc)
+    (ws)
+    (word)))
+
+================================================================================
+Closing free form modifier delimiter without surrounding attached modifier
+================================================================================
+*|some|text|*
+
+/|*some|* text |/
+
+_| some text ||_
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (free_bold
+      (free_bold_open)
+      (word)
+      (punc)
+      (word)
+      (free_bold_close)))
+  (paragraph
+    (free_italic
+      (free_italic_open)
+      (bold
+        (bold_open)
+        (word)
+        (punc)
+        (bold_close))
+      (ws)
+      (word)
+      (ws)
+      (free_italic_close)))
+  (paragraph
+    (free_underline
+      (free_underline_open)
+      (ws)
+      (word)
+      (ws)
+      (word)
+      (ws)
+      (punc)
+      (free_underline_close))))
+
+================================================================================
+Break attached modifiers before detached modifier
+================================================================================
+_|
+* _|word|_
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (punc)
+    (punc))
+  (test_heading
+    (title
+      (free_underline
+        (free_underline_open)
+        (word)
+        (free_underline_close)))))
+
+================================================================================
+Break attached modifiers before paragraph break
+================================================================================
+_|
+
+_|word|_
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (punc)
+    (punc))
+  (paragraph
+    (free_underline
+      (free_underline_open)
+      (word)
+      (free_underline_close))))
