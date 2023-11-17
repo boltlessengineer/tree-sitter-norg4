@@ -78,6 +78,10 @@ module.exports = grammar({
         word: (_) => word,
         ws: (_) => prec(-1, whitespace),
         soft_break: (_) => seq(optional(whitespace), newline),
+        escape_sequence: ($) => seq(
+            token(prec(9, "\\")),
+            alias(token(prec(9, choice(/./, newline))), $.escape_char)
+        ),
         paragraph: ($) =>
             prec.right(
                 1,
@@ -129,6 +133,7 @@ module.exports = grammar({
                 choice(
                     seq($.word, optional(alias($._open_conflict, $.punc))),
                     $.punc,
+                    $.escape_sequence,
                     alias("[", $.punc),
                     alias("{", $.punc),
                     prec.left(seq($._verbatim_non_ws, $._verbatim_non_ws)),
@@ -246,6 +251,7 @@ module.exports = grammar({
             choice(
                 seq($.word, optional(alias($._open_conflict, $.punc))),
                 $.punc,
+                $.escape_sequence,
                 // TODO: wrap this seq(...) as _link_mod_wrap and make it conflict with punc or _non_ws
                 seq(
                     optional(seq($.word, $.link_modifier)),
@@ -284,6 +290,7 @@ function gen_attached_modifier(type, mod) {
         choice(
             seq($.word, optional(alias($._open_conflict, $.punc))),
             $.punc,
+            $.escape_sequence,
             seq(
                 optional(seq($.word, $.link_modifier)),
                 choice(

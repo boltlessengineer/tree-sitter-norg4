@@ -80,6 +80,60 @@
         }
       ]
     },
+    "escape_sequence": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": 9,
+            "content": {
+              "type": "STRING",
+              "value": "\\"
+            }
+          }
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "TOKEN",
+            "content": {
+              "type": "PREC",
+              "value": 9,
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "PATTERN",
+                    "value": "."
+                  },
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "\n"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "\r"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "\r\n"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "named": true,
+          "value": "escape_char"
+        }
+      ]
+    },
     "paragraph": {
       "type": "PREC_RIGHT",
       "value": 1,
@@ -293,6 +347,10 @@
         "value": ":"
       }
     },
+    "free_open": {
+      "type": "STRING",
+      "value": "|"
+    },
     "verbatim_open": {
       "type": "PREC_DYNAMIC",
       "value": 3,
@@ -353,6 +411,10 @@
           {
             "type": "SYMBOL",
             "name": "punc"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "escape_sequence"
           },
           {
             "type": "ALIAS",
@@ -433,10 +495,6 @@
           }
         ]
       }
-    },
-    "free_open": {
-      "type": "STRING",
-      "value": "|"
     },
     "free_bold_open": {
       "type": "PREC_DYNAMIC",
@@ -984,6 +1042,10 @@
           "name": "punc"
         },
         {
+          "type": "SYMBOL",
+          "name": "escape_sequence"
+        },
+        {
           "type": "SEQ",
           "members": [
             {
@@ -1187,6 +1249,10 @@
           "name": "punc"
         },
         {
+          "type": "SYMBOL",
+          "name": "escape_sequence"
+        },
+        {
           "type": "SEQ",
           "members": [
             {
@@ -1388,6 +1454,10 @@
         {
           "type": "SYMBOL",
           "name": "punc"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "escape_sequence"
         },
         {
           "type": "SEQ",
@@ -2072,6 +2142,10 @@
         {
           "type": "SYMBOL",
           "name": "punc"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "escape_sequence"
         },
         {
           "type": "SEQ",

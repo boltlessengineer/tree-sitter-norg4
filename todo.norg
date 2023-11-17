@@ -9,6 +9,7 @@
 ---- (x) attached modifier extension
 --- ( ) verbatim free-form
 ---- ( ) attached modifier extension
+-- (x) escape sequence
 -- ( ) linkables
 --- (x) basic anchor & link
 --- ( ) detailed CST for location information
