@@ -40,7 +40,6 @@ module.exports = grammar({
         $.free_italic_close,
         $.free_underline_close,
         $.verbatim_close,
-        // $._free_close,
     ],
     conflicts: ($) => [
         [$.punc, $.bold_open],
@@ -78,10 +77,11 @@ module.exports = grammar({
         word: (_) => word,
         ws: (_) => prec(-1, whitespace),
         soft_break: (_) => seq(optional(whitespace), newline),
-        escape_sequence: ($) => seq(
-            token(prec(9, "\\")),
-            alias(token(prec(9, choice(/./, newline))), $.escape_char)
-        ),
+        escape_sequence: ($) =>
+            seq(
+                token(prec(9, "\\")),
+                alias(token(prec(9, choice(/./, newline))), $.escape_char),
+            ),
         paragraph: ($) =>
             prec.right(
                 1,
@@ -103,9 +103,9 @@ module.exports = grammar({
             ),
         punc: ($) =>
             choice(
-                token(prec(2, seq("*", repeat1(prec(9, "*"))))),
-                token(prec(2, seq("/", repeat1(prec(9, "/"))))),
-                token(prec(2, seq("`", repeat1(prec(9, "`"))))),
+                token(prec(2, seq("*", repeat1("*")))),
+                token(prec(2, seq("/", repeat1("/")))),
+                token(prec(2, seq("`", repeat1("`")))),
                 "*",
                 "/",
                 "_",
@@ -120,7 +120,8 @@ module.exports = grammar({
                 "]",
                 token(/[^\{\[\n\r\p{Z}\p{L}\p{N}]/),
             ),
-        link_modifier: (_) => prec.dynamic(PREC.standard_attached_modifier, ":"),
+        link_modifier: (_) =>
+            prec.dynamic(PREC.standard_attached_modifier, ":"),
         free_open: (_) => "|",
         // NOTE: give precedence level on verbatim_open to give higher prefer
         // level to stack with verbatim_open even verbatim is not completed yet
@@ -149,9 +150,6 @@ module.exports = grammar({
                     ),
                 ),
             ),
-        ...gen_free_attached_modifier("bold", "*"),
-        ...gen_free_attached_modifier("italic", "/"),
-        ...gen_free_attached_modifier("underline", "_"),
         ...gen_attached_modifier("bold", "*"),
         ...gen_attached_modifier("italic", "/"),
         ...gen_attached_modifier("underline", "_"),
@@ -278,10 +276,7 @@ module.exports = grammar({
  * @param {string} mod
  */
 function gen_attached_modifier(type, mod) {
-    /**
-     * @type {RuleBuilders<string, string>}
-     */
-    let rules = {};
+    let rules = gen_free_attached_modifier(type);
     // NOTE: give precedence level on *_open to give higher prefer
     // level to stack with *_open even attached modifier is not completed yet
     rules[type + "_open"] = (_) =>
@@ -331,9 +326,8 @@ function gen_attached_modifier(type, mod) {
 
 /**
  * @param {string} type
- * @param {string} mod
  */
-function gen_free_attached_modifier(type, mod) {
+function gen_free_attached_modifier(type) {
     /**
      * @type {RuleBuilders<string, string>}
      */
