@@ -14,10 +14,13 @@ enum TokenType: char {
     BOLD_CLOSE,
     ITALIC_CLOSE,
     UNDERLINE_CLOSE,
+    VERBATIM_CLOSE,
+    COMMENT_CLOSE,
     FREE_BOLD_CLOSE,
     FREE_ITALIC_CLOSE,
     FREE_UNDERLINE_CLOSE,
-    VERBATIM_CLOSE,
+    FREE_VERBATIM_CLOSE,
+    FREE_COMMENT_CLOSE,
 };
 
 struct Scanner {
@@ -28,6 +31,7 @@ struct Scanner {
         attached_modifiers['/'] = ITALIC_CLOSE;
         attached_modifiers['_'] = UNDERLINE_CLOSE;
         attached_modifiers['`'] = VERBATIM_CLOSE;
+        attached_modifiers['%'] = COMMENT_CLOSE;
     }
     bool scan(const bool *valid_symbols) {
         if (lexer->eof(lexer) && valid_symbols[END_OF_FILE]) {

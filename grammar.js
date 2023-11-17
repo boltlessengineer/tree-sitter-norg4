@@ -9,6 +9,7 @@ const ATTACHED_MODIFIERS = [
     ],
     VERBATIM_ATTACHED_MODIFIERS = [
         "verbatim",
+        "comment",
         // TODO: add more
     ],
     PREC = {
@@ -36,16 +37,20 @@ module.exports = grammar({
         $.bold_close,
         $.italic_close,
         $.underline_close,
+        $.verbatim_close,
+        $.comment_close,
         $.free_bold_close,
         $.free_italic_close,
         $.free_underline_close,
-        $.verbatim_close,
+        $.free_verbatim_close,
+        $.free_comment_close,
     ],
     conflicts: ($) => [
         [$.punc, $.bold_open],
         [$.punc, $.italic_open],
         [$.punc, $.underline_open],
         [$.punc, $.verbatim_open],
+        [$.punc, $.comment_open],
         [$.punc, $.free_open],
         // NOTE: these conflicts are here to solve link_modifier cases
         // as link modifier needs more than 1 lookahead(followed by completed markup or not,)
@@ -62,6 +67,13 @@ module.exports = grammar({
         [$.bold],
         [$.italic],
         [$.underline],
+        [$.verbatim],
+        [$.comment],
+        [$.free_bold],
+        [$.free_italic],
+        [$.free_underline],
+        [$.free_verbatim],
+        [$.free_comment],
     ],
     precedences: () => [],
     rules: {
@@ -106,10 +118,12 @@ module.exports = grammar({
                 token(prec(2, seq("*", repeat1("*")))),
                 token(prec(2, seq("/", repeat1("/")))),
                 token(prec(2, seq("`", repeat1("`")))),
+                token(prec(2, seq("%", repeat1("%")))),
                 "*",
                 "/",
                 "_",
                 "`",
+                "%",
                 ":",
                 $._close_conflict,
                 // NOTE: only `(` can be parsed as punctuation and not `{`, `[`
@@ -123,33 +137,8 @@ module.exports = grammar({
         link_modifier: (_) =>
             prec.dynamic(PREC.standard_attached_modifier, ":"),
         free_open: (_) => "|",
-        // NOTE: give precedence level on verbatim_open to give higher prefer
-        // level to stack with verbatim_open even verbatim is not completed yet
-        verbatim_open: (_) =>
-            prec.dynamic(PREC.verbatim_attached_modifier, "`"),
-        verbatim: ($) =>
-            seq($.verbatim_open, $._verbatim_non_ws, $.verbatim_close),
-        _verbatim_non_ws: ($) =>
-            prec.right(
-                choice(
-                    seq($.word, optional(alias($._open_conflict, $.punc))),
-                    $.punc,
-                    $.escape_sequence,
-                    alias("[", $.punc),
-                    alias("{", $.punc),
-                    prec.left(seq($._verbatim_non_ws, $._verbatim_non_ws)),
-                    prec.left(
-                        seq($._verbatim_non_ws, $.ws, $._verbatim_non_ws),
-                    ),
-                    prec.left(
-                        seq(
-                            $._verbatim_non_ws,
-                            $.soft_break,
-                            $._verbatim_non_ws,
-                        ),
-                    ),
-                ),
-            ),
+        ...gen_verbatim_attached_modifier("verbatim", "`"),
+        ...gen_verbatim_attached_modifier("comment", "%"),
         ...gen_attached_modifier("bold", "*"),
         ...gen_attached_modifier("italic", "/"),
         ...gen_attached_modifier("underline", "_"),
@@ -353,13 +342,12 @@ function gen_free_attached_modifier(type) {
                         (t) => $["free_" + t],
                     ),
                     ...VERBATIM_ATTACHED_MODIFIERS.map((t) => $[t]),
-                    // ...VERBATIM_ATTACHED_MODIFIERS.map(
-                    //     (t) => $["free_" + t],
-                    // ),
+                    ...VERBATIM_ATTACHED_MODIFIERS.map(
+                        (t) => $["free_" + t],
+                    ),
                 ),
             ),
         );
-
     rules["free_" + type] = ($) =>
         seq(
             $["free_" + type + "_open"],
@@ -373,6 +361,85 @@ function gen_free_attached_modifier(type) {
                 ),
             ),
             $["free_" + type + "_close"],
+            optional($.attached_modifier_extension),
+        );
+    return rules;
+}
+
+/**
+ * @param {string} type
+ * @param {string} mod
+ */
+function gen_verbatim_attached_modifier(type, mod) {
+    let rules = gen_free_verbatim_attached_modifier(type);
+    // NOTE: give precedence level on verbatim_open to give higher prefer
+    // level to stack with verbatim_open even verbatim is not completed yet
+    rules[type + "_open"] = (_) =>
+        prec.dynamic(PREC.verbatim_attached_modifier, mod);
+    const _non_ws = "_" + type + "_non_ws";
+    rules[type] = ($) => seq(
+        $[type + "_open"],
+        $[_non_ws],
+        $[type + "_close"],
+        optional($.attached_modifier_extension),
+    );
+    rules[_non_ws] = ($) =>
+        prec.right(
+            choice(
+                choice(
+                    seq($.word, optional(alias($._open_conflict, $.punc))),
+                    $.punc,
+                    $.escape_sequence,
+                    alias("[", $.punc),
+                    alias("{", $.punc),
+                    prec.left(seq($[_non_ws], $[_non_ws])),
+                    prec.left(seq($[_non_ws], $.ws, $[_non_ws])),
+                    prec.left(seq($[_non_ws], $.soft_break, $[_non_ws])),
+                ),
+            ),
+        );
+    return rules;
+}
+
+/**
+ * @param {string} type
+ */
+function gen_free_verbatim_attached_modifier(type) {
+    /**
+     * @type {RuleBuilders<string, string>}
+     */
+    let rules = {};
+    rules["free_" + type + "_open"] = ($) =>
+        prec.dynamic(
+            PREC.free_form_standard_attached_modifier,
+            seq(alias($[type + "_open"], "open"), alias($.free_open, "open")),
+        );
+    rules["_free_" + type + "_inline"] = ($) =>
+        prec.right(
+            repeat1(
+                choice(
+                    seq($.word, optional(alias($._open_conflict, $.punc))),
+                    $.ws,
+                    $.punc,
+                    // NOTE: ignore standard close when parsing as free form
+                    $[type + "_close"],
+                ),
+            ),
+        );
+    rules["free_" + type] = ($) =>
+        seq(
+            $["free_" + type + "_open"],
+            choice(
+                $.soft_break,
+                seq(
+                    optional($.soft_break),
+                    $["_free_" + type + "_inline"],
+                    repeat(seq($.soft_break, $["_free_" + type + "_inline"])),
+                    optional($.soft_break),
+                ),
+            ),
+            $["free_" + type + "_close"],
+            optional($.attached_modifier_extension),
         );
     return rules;
 }

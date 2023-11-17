@@ -1,14 +1,13 @@
 - ( ) paragraph
 -- (x) paragraph break
--- ( ) attached modifiers
+-- (x) attached modifiers
 --- (x) standard
+---- (x) free-form
 ---- (x) attached modifier extension
 --- (x) verbatim
---- (x) link modifier
---- (x) free-form
+---- (x) free-form
 ---- (x) attached modifier extension
---- ( ) verbatim free-form
----- ( ) attached modifier extension
+--- (x) link modifier
 -- (x) escape sequence
 -- ( ) linkables
 --- (x) basic anchor & link

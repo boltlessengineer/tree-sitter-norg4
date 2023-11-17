@@ -92,6 +92,10 @@
           "named": true
         },
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "escape_sequence",
           "named": true
         },
@@ -144,6 +148,54 @@
     "fields": {}
   },
   {
+    "type": "comment",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attached_modifier_extension",
+          "named": true
+        },
+        {
+          "type": "comment_close",
+          "named": true
+        },
+        {
+          "type": "comment_open",
+          "named": true
+        },
+        {
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "punc",
+          "named": true
+        },
+        {
+          "type": "soft_break",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        },
+        {
+          "type": "ws",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "comment_open",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "document",
     "named": true,
     "fields": {},
@@ -186,7 +238,15 @@
       "required": true,
       "types": [
         {
+          "type": "attached_modifier_extension",
+          "named": true
+        },
+        {
           "type": "bold_close",
+          "named": true
+        },
+        {
+          "type": "comment",
           "named": true
         },
         {
@@ -198,11 +258,19 @@
           "named": true
         },
         {
+          "type": "free_comment",
+          "named": true
+        },
+        {
           "type": "free_italic",
           "named": true
         },
         {
           "type": "free_underline",
+          "named": true
+        },
+        {
+          "type": "free_verbatim",
           "named": true
         },
         {
@@ -242,6 +310,54 @@
     "fields": {}
   },
   {
+    "type": "free_comment",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attached_modifier_extension",
+          "named": true
+        },
+        {
+          "type": "comment_close",
+          "named": true
+        },
+        {
+          "type": "free_comment_close",
+          "named": true
+        },
+        {
+          "type": "free_comment_open",
+          "named": true
+        },
+        {
+          "type": "punc",
+          "named": true
+        },
+        {
+          "type": "soft_break",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        },
+        {
+          "type": "ws",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "free_comment_open",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "free_italic",
     "named": true,
     "fields": {},
@@ -250,11 +366,23 @@
       "required": true,
       "types": [
         {
+          "type": "attached_modifier_extension",
+          "named": true
+        },
+        {
           "type": "bold",
           "named": true
         },
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "free_bold",
+          "named": true
+        },
+        {
+          "type": "free_comment",
           "named": true
         },
         {
@@ -267,6 +395,10 @@
         },
         {
           "type": "free_underline",
+          "named": true
+        },
+        {
+          "type": "free_verbatim",
           "named": true
         },
         {
@@ -314,11 +446,23 @@
       "required": true,
       "types": [
         {
+          "type": "attached_modifier_extension",
+          "named": true
+        },
+        {
           "type": "bold",
           "named": true
         },
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "free_bold",
+          "named": true
+        },
+        {
+          "type": "free_comment",
           "named": true
         },
         {
@@ -331,6 +475,10 @@
         },
         {
           "type": "free_underline_open",
+          "named": true
+        },
+        {
+          "type": "free_verbatim",
           "named": true
         },
         {
@@ -370,6 +518,54 @@
     "fields": {}
   },
   {
+    "type": "free_verbatim",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attached_modifier_extension",
+          "named": true
+        },
+        {
+          "type": "free_verbatim_close",
+          "named": true
+        },
+        {
+          "type": "free_verbatim_open",
+          "named": true
+        },
+        {
+          "type": "punc",
+          "named": true
+        },
+        {
+          "type": "soft_break",
+          "named": true
+        },
+        {
+          "type": "verbatim_close",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        },
+        {
+          "type": "ws",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "free_verbatim_open",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "italic",
     "named": true,
     "fields": {},
@@ -383,6 +579,10 @@
         },
         {
           "type": "bold",
+          "named": true
+        },
+        {
+          "type": "comment",
           "named": true
         },
         {
@@ -484,6 +684,10 @@
           "named": true
         },
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "escape_sequence",
           "named": true
         },
@@ -562,6 +766,10 @@
         },
         {
           "type": "bold",
+          "named": true
+        },
+        {
+          "type": "comment",
           "named": true
         },
         {
@@ -661,6 +869,10 @@
           "named": true
         },
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "free_bold",
           "named": true
         },
@@ -721,6 +933,10 @@
         },
         {
           "type": "bold",
+          "named": true
+        },
+        {
+          "type": "comment",
           "named": true
         },
         {
@@ -788,6 +1004,10 @@
       "required": true,
       "types": [
         {
+          "type": "attached_modifier_extension",
+          "named": true
+        },
+        {
           "type": "escape_sequence",
           "named": true
         },
@@ -841,6 +1061,10 @@
     "named": false
   },
   {
+    "type": "%",
+    "named": false
+  },
+  {
     "type": "(",
     "named": false
   },
@@ -889,6 +1113,10 @@
     "named": true
   },
   {
+    "type": "comment_close",
+    "named": true
+  },
+  {
     "type": "escape_char",
     "named": true
   },
@@ -897,11 +1125,19 @@
     "named": true
   },
   {
+    "type": "free_comment_close",
+    "named": true
+  },
+  {
     "type": "free_italic_close",
     "named": true
   },
   {
     "type": "free_underline_close",
+    "named": true
+  },
+  {
+    "type": "free_verbatim_close",
     "named": true
   },
   {
