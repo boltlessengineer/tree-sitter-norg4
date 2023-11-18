@@ -12,10 +12,17 @@
 
 this tree-sitter parser doesn't works with upstream [tree-sitter]{https://github.com/tree-sitter/tree-sitter}. You need {https://github.com/boltlessengineer/tree-sitter/tree/neorg_dev}[this patched version] to make this parser work.
 
+*** things blocking this parser's development
+
+- {https://github.com/tree-sitter/tree-sitter/pull/2741}[tree-sitter#2741]
+-- and all other tree-sitter parser cases break by this PR
+- {https://github.com/nvim-neorg/norg-specs/issues/28}[norg-specs#28]
+
 ** Usage
 
 @code bash
 pnpm run generate # generate parser
 pnpm run test # generate & test
-pnpm run parse ... # generate & parse
+pnpm run parse [paths] # generate & parse
+pnpm run size # print parser size
 @end

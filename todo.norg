@@ -10,7 +10,8 @@
 ---- (x) free-form
 ---- (x) attached modifier extension
 --- (x) link modifier
--- (x) escape sequence
+-- (=) escape sequence
+       see: {https://github.com/nvim-neorg/norg-specs/issues/28}[norg-specs#28]
 -- ( ) linkables
 --- (x) basic anchor & link
 --- ( ) detailed CST for location information
@@ -18,7 +19,7 @@
 
 * Docs
 
-- ( ) organize parsers %somebody help me%
+- ( ) organize tests %somebody help me%
 
 * NOTES
 
