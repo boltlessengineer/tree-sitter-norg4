@@ -23,7 +23,7 @@ const ATTACHED_MODIFIERS = [
     newline = choice("\n", "\r", "\r\n");
 
 module.exports = grammar({
-    name: "norgtest",
+    name: "norg4",
     extras: ($) => [$._preceding_whitespace],
     inline: (_) => [],
     externals: ($) => [

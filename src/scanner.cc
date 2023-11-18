@@ -122,25 +122,25 @@ struct Scanner {
 };
 
 extern "C" {
-    void *tree_sitter_norgtest_external_scanner_create() { return new Scanner(); }
+    void *tree_sitter_norg4_external_scanner_create() { return new Scanner(); }
 
-    void tree_sitter_norgtest_external_scanner_destroy(void *payload) {
+    void tree_sitter_norg4_external_scanner_destroy(void *payload) {
         delete static_cast<Scanner * >(payload);
     }
 
-    bool tree_sitter_norgtest_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
+    bool tree_sitter_norg4_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
         Scanner *scanner = static_cast<Scanner*>(payload);
         scanner->lexer = lexer;
         return scanner->scan(valid_symbols);
     }
 
-    unsigned tree_sitter_norgtest_external_scanner_serialize(void *payload, char *buffer) {
+    unsigned tree_sitter_norg4_external_scanner_serialize(void *payload, char *buffer) {
         Scanner* scanner = static_cast<Scanner*>(payload);
         size_t total_size = 0;
         return total_size;
     }
 
-    void tree_sitter_norgtest_external_scanner_deserialize(void *payload, const char *buffer, unsigned length) {
+    void tree_sitter_norg4_external_scanner_deserialize(void *payload, const char *buffer, unsigned length) {
     }
 }
 
