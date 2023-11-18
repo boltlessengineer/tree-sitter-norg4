@@ -6,7 +6,8 @@
     "scripts": {
         "generate": "./tree-sitter-patch generate",
         "test": "./tree-sitter-patch generate && ./tree-sitter-patch test",
-        "parse": "./tree-sitter-patch generate && ./tree-sitter-patch parse"
+        "parse": "./tree-sitter-patch generate && ./tree-sitter-patch parse",
+        "size": "du -h ~/.cache/tree-sitter/lib/norg*.so"
     },
     "keywords": [
         "tree-sitter",

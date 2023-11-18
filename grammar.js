@@ -5,13 +5,12 @@ const ATTACHED_MODIFIERS = [
         "bold",
         "italic",
         "underline",
-        // TODO: add more
+        "strikethrough",
+        "spoiler",
+        "superscript",
+        "subscript",
     ],
-    VERBATIM_ATTACHED_MODIFIERS = [
-        "verbatim",
-        "comment",
-        // TODO: add more
-    ],
+    VERBATIM_ATTACHED_MODIFIERS = ["verbatim", "comment", "math", "macro"],
     PREC = {
         standard_attached_modifier: 1,
         free_form_standard_attached_modifier: 2,
@@ -37,43 +36,46 @@ module.exports = grammar({
         $.bold_close,
         $.italic_close,
         $.underline_close,
+        $.strikethrough_close,
+        $.spoiler_close,
+        $.superscript_close,
+        $.subscript_close,
         $.verbatim_close,
         $.comment_close,
+        $.math_close,
+        $.macro_close,
         $.free_bold_close,
         $.free_italic_close,
         $.free_underline_close,
+        $.free_strikethrough_close,
+        $.free_spoiler_close,
+        $.free_superscript_close,
+        $.free_subscript_close,
         $.free_verbatim_close,
         $.free_comment_close,
+        $.free_math_close,
+        $.free_macro_close,
     ],
     conflicts: ($) => [
-        [$.punc, $.bold_open],
-        [$.punc, $.italic_open],
-        [$.punc, $.underline_open],
-        [$.punc, $.verbatim_open],
-        [$.punc, $.comment_open],
+        ...ATTACHED_MODIFIERS.map((t) => [$.punc, $[t + "_open"]]),
+        ...VERBATIM_ATTACHED_MODIFIERS.map((t) => [$.punc, $[t + "_open"]]),
         [$.punc, $.free_open],
+
         // NOTE: these conflicts are here to solve link_modifier cases
         // as link modifier needs more than 1 lookahead(followed by completed markup or not,)
         // link_modifier and punctuation should be treated as conflict cases
         [$._non_ws],
         [$._title],
-        [$._bold_non_ws],
-        [$._italic_non_ws],
-        [$._underline_non_ws],
+        ...ATTACHED_MODIFIERS.map((t) => [$["_" + t + "_non_ws"]]),
+
         // HACK: and these are for NOT making ERROR with unclosed
         // attached_modifier_extensions
         // unclosed attached_modifier_extensions should not be ERROR because
         // otherwise, parser will fallback to pure punctuations
-        [$.bold],
-        [$.italic],
-        [$.underline],
-        [$.verbatim],
-        [$.comment],
-        [$.free_bold],
-        [$.free_italic],
-        [$.free_underline],
-        [$.free_verbatim],
-        [$.free_comment],
+        ...ATTACHED_MODIFIERS.map((t) => [$[t]]),
+        ...ATTACHED_MODIFIERS.map((t) => [$["free_" + t]]),
+        ...VERBATIM_ATTACHED_MODIFIERS.map((t) => [$[t]]),
+        ...VERBATIM_ATTACHED_MODIFIERS.map((t) => [$["free_" + t]]),
     ],
     precedences: () => [],
     rules: {
@@ -117,13 +119,25 @@ module.exports = grammar({
             choice(
                 token(prec(2, seq("*", repeat1("*")))),
                 token(prec(2, seq("/", repeat1("/")))),
+                token(prec(2, seq("-", repeat1("-")))),
+                token(prec(2, seq("!", repeat1("!")))),
+                token(prec(2, seq("^", repeat1("^")))),
+                token(prec(2, seq(",", repeat1(",")))),
                 token(prec(2, seq("`", repeat1("`")))),
                 token(prec(2, seq("%", repeat1("%")))),
+                token(prec(2, seq("$", repeat1("$")))),
+                token(prec(2, seq("&", repeat1("&")))),
                 "*",
                 "/",
                 "_",
+                "-",
+                "!",
+                "^",
+                ",",
                 "`",
                 "%",
+                "$",
+                "&",
                 ":",
                 $._close_conflict,
                 // NOTE: only `(` can be parsed as punctuation and not `{`, `[`
@@ -139,9 +153,15 @@ module.exports = grammar({
         free_open: (_) => "|",
         ...gen_verbatim_attached_modifier("verbatim", "`"),
         ...gen_verbatim_attached_modifier("comment", "%"),
+        ...gen_verbatim_attached_modifier("math", "$"),
+        ...gen_verbatim_attached_modifier("macro", "&"),
         ...gen_attached_modifier("bold", "*"),
         ...gen_attached_modifier("italic", "/"),
         ...gen_attached_modifier("underline", "_"),
+        ...gen_attached_modifier("strikethrough", "-"),
+        ...gen_attached_modifier("spoiler", "!"),
+        ...gen_attached_modifier("superscript", "^"),
+        ...gen_attached_modifier("subscript", ","),
         attached_modifier_extension: ($) =>
             seq(
                 "(",
@@ -223,10 +243,11 @@ module.exports = grammar({
                     optional(seq($.word, $.link_modifier)),
                     choice(
                         ...ATTACHED_MODIFIERS.map((t) => $[t]),
+                        ...ATTACHED_MODIFIERS.map((t) => $["free_" + t]),
                         ...VERBATIM_ATTACHED_MODIFIERS.map((t) => $[t]),
-                        $.free_bold,
-                        $.free_italic,
-                        $.free_underline,
+                        ...VERBATIM_ATTACHED_MODIFIERS.map(
+                            (t) => $["free_" + t],
+                        ),
                     ),
                     optional(seq($.link_modifier, $._lookahead_word)),
                 ),
@@ -245,10 +266,11 @@ module.exports = grammar({
                     optional(seq($.word, $.link_modifier)),
                     choice(
                         ...ATTACHED_MODIFIERS.map((t) => $[t]),
+                        ...ATTACHED_MODIFIERS.map((t) => $["free_" + t]),
                         ...VERBATIM_ATTACHED_MODIFIERS.map((t) => $[t]),
-                        $.free_bold,
-                        $.free_italic,
-                        $.free_underline,
+                        ...VERBATIM_ATTACHED_MODIFIERS.map(
+                            (t) => $["free_" + t],
+                        ),
                     ),
                     optional(seq($.link_modifier, $._lookahead_word)),
                 ),
@@ -266,6 +288,7 @@ module.exports = grammar({
  * @param {string} mod
  */
 function gen_attached_modifier(type, mod) {
+    const other_attached_modfiers = ATTACHED_MODIFIERS.filter((t) => t != type);
     let rules = gen_free_attached_modifier(type);
     // NOTE: give precedence level on *_open to give higher prefer
     // level to stack with *_open even attached modifier is not completed yet
@@ -279,13 +302,10 @@ function gen_attached_modifier(type, mod) {
             seq(
                 optional(seq($.word, $.link_modifier)),
                 choice(
-                    ...ATTACHED_MODIFIERS.filter((t) => t != type).map(
-                        (t) => $[t],
-                    ),
-                    ...ATTACHED_MODIFIERS.filter((t) => t != type).map(
-                        (t) => $["free_" + t],
-                    ),
+                    ...other_attached_modfiers.map((t) => $[t]),
+                    ...other_attached_modfiers.map((t) => $["free_" + t]),
                     ...VERBATIM_ATTACHED_MODIFIERS.map((t) => $[t]),
+                    ...VERBATIM_ATTACHED_MODIFIERS.map((t) => $["free_" + t]),
                 ),
                 // NOTE: use zero-length token here to ensure lookahead is word without actually consuming it
                 optional(seq($.link_modifier, $._lookahead_word)),
@@ -318,6 +338,7 @@ function gen_attached_modifier(type, mod) {
  * @param {string} type
  */
 function gen_free_attached_modifier(type) {
+    const other_attached_modfiers = ATTACHED_MODIFIERS.filter((t) => t != type);
     /**
      * @type {RuleBuilders<string, string>}
      */
@@ -334,18 +355,10 @@ function gen_free_attached_modifier(type) {
                     seq($.word, optional(alias($._open_conflict, $.punc))),
                     $.ws,
                     $.punc,
-                    // NOTE: ignore standard close when parsing as free form
-                    $[type + "_close"],
-                    ...ATTACHED_MODIFIERS.filter((t) => t != type).map(
-                        (t) => $[t],
-                    ),
-                    ...ATTACHED_MODIFIERS.filter((t) => t != type).map(
-                        (t) => $["free_" + t],
-                    ),
+                    ...other_attached_modfiers.map((t) => $[t]),
+                    ...other_attached_modfiers.map((t) => $["free_" + t]),
                     ...VERBATIM_ATTACHED_MODIFIERS.map((t) => $[t]),
-                    ...VERBATIM_ATTACHED_MODIFIERS.map(
-                        (t) => $["free_" + t],
-                    ),
+                    ...VERBATIM_ATTACHED_MODIFIERS.map((t) => $["free_" + t]),
                 ),
             ),
         );
@@ -378,12 +391,13 @@ function gen_verbatim_attached_modifier(type, mod) {
     rules[type + "_open"] = (_) =>
         prec.dynamic(PREC.verbatim_attached_modifier, mod);
     const _non_ws = "_" + type + "_non_ws";
-    rules[type] = ($) => seq(
-        $[type + "_open"],
-        $[_non_ws],
-        $[type + "_close"],
-        optional($.attached_modifier_extension),
-    );
+    rules[type] = ($) =>
+        seq(
+            $[type + "_open"],
+            $[_non_ws],
+            $[type + "_close"],
+            optional($.attached_modifier_extension),
+        );
     rules[_non_ws] = ($) =>
         prec.right(
             choice(
@@ -412,7 +426,7 @@ function gen_free_verbatim_attached_modifier(type) {
     let rules = {};
     rules["free_" + type + "_open"] = ($) =>
         prec.dynamic(
-            PREC.free_form_standard_attached_modifier,
+            PREC.free_form_verbatim_attached_modifier,
             seq(alias($[type + "_open"], "open"), alias($.free_open, "open")),
         );
     rules["_free_" + type + "_inline"] = ($) =>
@@ -422,8 +436,6 @@ function gen_free_verbatim_attached_modifier(type) {
                     seq($.word, optional(alias($._open_conflict, $.punc))),
                     $.ws,
                     $.punc,
-                    // NOTE: ignore standard close when parsing as free form
-                    $[type + "_close"],
                 ),
             ),
         );

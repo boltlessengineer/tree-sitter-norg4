@@ -1,3 +1,5 @@
+* Implement
+
 - ( ) paragraph
 -- (x) paragraph break
 -- (x) attached modifiers
@@ -14,6 +16,10 @@
 --- ( ) detailed CST for location information
 - (=) block types
 
+* Docs
+
+- ( ) organize parsers %somebody help me%
+
 * NOTES
 
 free-form attached modifiers can start/end with EOL char.
@@ -27,3 +33,7 @@ this is not bold but free-form bold|*
 this is not bold but free-form bold
 |*
 @end
+
+* TO ASK
+  - how can user get useful auto complete if they didn't entered attached modifeir extensions yet?
+    e.g. icons which can be implemented as `%smile%(icon)`

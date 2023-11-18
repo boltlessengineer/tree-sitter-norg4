@@ -65,6 +65,44 @@ word
       (free_bold_close))))
 
 ================================================================================
+PREC: free-form attached modifier > attached modifier
+================================================================================
+*|word *word* word|*
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (free_bold
+      (free_bold_open)
+      (word)
+      (ws)
+      (punc)
+      (word)
+      (punc)
+      (ws)
+      (word)
+      (free_bold_close))))
+
+================================================================================
+PREC: free-form verbatim attached modifier > verbatim attached modifier
+================================================================================
+`| word `word` word |`
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (free_verbatim
+      (free_verbatim_open)
+      (ws)
+      (word)
+      (ws)
+      (punc)
+      (word)
+      (punc)
+      (ws)
+      (word)
+      (ws)
+      (free_verbatim_close))))
+
+================================================================================
 PREC: Verbatim > nested standard markups (inside free-form markups)
 ================================================================================
 _|*/`word/*`|_
