@@ -1,5 +1,8 @@
 * tree-sitter-norg4
 
+** Implement state
+   see {todo.norg}
+
 ** goals
 
 - parse compelete {https://en.wikipedia.org/wiki/Parse_tree}[concrete syntax tree]
