@@ -218,6 +218,7 @@ module.exports = grammar({
             choice(
                 seq($.word, optional(alias($._open_conflict, $.punc))),
                 $.punc,
+                $.escape_sequence,
                 seq(
                     optional(seq($.word, $.link_modifier)),
                     choice(

@@ -2581,6 +2581,10 @@
           "name": "punc"
         },
         {
+          "type": "SYMBOL",
+          "name": "escape_sequence"
+        },
+        {
           "type": "SEQ",
           "members": [
             {

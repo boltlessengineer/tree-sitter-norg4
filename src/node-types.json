@@ -873,6 +873,10 @@
           "named": true
         },
         {
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
           "type": "free_bold",
           "named": true
         },
