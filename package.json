@@ -18,5 +18,8 @@
     "license": "ISC",
     "devDependencies": {
         "tree-sitter-cli": "^0.20.8"
+    },
+    "dependencies": {
+        "@types/node": "^20.9.2"
     }
 }

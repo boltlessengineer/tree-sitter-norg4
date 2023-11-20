@@ -135,7 +135,7 @@ extern "C" {
     }
 
     unsigned tree_sitter_norg4_external_scanner_serialize(void *payload, char *buffer) {
-        Scanner* scanner = static_cast<Scanner*>(payload);
+        // Scanner* scanner = static_cast<Scanner*>(payload);
         size_t total_size = 0;
         return total_size;
     }

@@ -74,15 +74,22 @@
   {
     "type": "bold",
     "named": true,
-    "fields": {},
+    "fields": {
+      "extension": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "attached_modifier_extension",
-          "named": true
-        },
         {
           "type": "bold_close",
           "named": true
@@ -1332,15 +1339,22 @@
   {
     "type": "italic",
     "named": true,
-    "fields": {},
+    "fields": {
+      "extension": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "attached_modifier_extension",
-          "named": true
-        },
         {
           "type": "bold",
           "named": true
@@ -1868,15 +1882,22 @@
   {
     "type": "spoiler",
     "named": true,
-    "fields": {},
+    "fields": {
+      "extension": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "attached_modifier_extension",
-          "named": true
-        },
         {
           "type": "bold",
           "named": true
@@ -2000,15 +2021,22 @@
   {
     "type": "strikethrough",
     "named": true,
-    "fields": {},
+    "fields": {
+      "extension": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "attached_modifier_extension",
-          "named": true
-        },
         {
           "type": "bold",
           "named": true
@@ -2132,15 +2160,22 @@
   {
     "type": "subscript",
     "named": true,
-    "fields": {},
+    "fields": {
+      "extension": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "attached_modifier_extension",
-          "named": true
-        },
         {
           "type": "bold",
           "named": true
@@ -2264,15 +2299,22 @@
   {
     "type": "superscript",
     "named": true,
-    "fields": {},
+    "fields": {
+      "extension": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "attached_modifier_extension",
-          "named": true
-        },
         {
           "type": "bold",
           "named": true
@@ -2538,15 +2580,22 @@
   {
     "type": "underline",
     "named": true,
-    "fields": {},
+    "fields": {
+      "extension": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "attached_modifier_extension",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "attached_modifier_extension",
-          "named": true
-        },
         {
           "type": "bold",
           "named": true
@@ -2798,6 +2847,10 @@
   },
   {
     "type": "_",
+    "named": false
+  },
+  {
+    "type": "_paragraph_break",
     "named": false
   },
   {

@@ -22,6 +22,10 @@ const ATTACHED_MODIFIERS = [
     whitespace = /\p{Zs}+/,
     newline = choice("\n", "\r", "\r\n");
 
+const d_alias = process.env.NORG_BUILD
+    ? alias
+    : (/** @type {RuleOrLiteral} */ rule, /** @type {string} */ _name) => rule;
+
 module.exports = grammar({
     name: "norg4",
     extras: ($) => [$._preceding_whitespace],
@@ -59,7 +63,7 @@ module.exports = grammar({
     conflicts: ($) => [
         ...ATTACHED_MODIFIERS.map((t) => [$.punc, $[t + "_open"]]),
         ...VERBATIM_ATTACHED_MODIFIERS.map((t) => [$.punc, $[t + "_open"]]),
-        [$.punc, $.free_open],
+        [$.punc, $._free_open],
 
         // NOTE: these conflicts are here to solve link_modifier cases
         // as link modifier needs more than 1 lookahead(followed by completed markup or not,)
@@ -103,7 +107,7 @@ module.exports = grammar({
                     $._non_ws,
                     choice(
                         prec(-1, alias($.soft_break, "_paragraph_break")),
-                        $._eof,
+                        alias($._eof, "_paragraph_break"),
                     ),
                 ),
             ),
@@ -134,6 +138,13 @@ module.exports = grammar({
                 "!",
                 "^",
                 ",",
+                // $.bold_open,
+                // $.italic_open,
+                // $.underline_open,
+                // $.strikethrough_open,
+                // $.spoiler_open,
+                // $.superscript_open,
+                // $.subscript_open,
                 "`",
                 "%",
                 "$",
@@ -150,7 +161,7 @@ module.exports = grammar({
             ),
         link_modifier: (_) =>
             prec.dynamic(PREC.standard_attached_modifier, ":"),
-        free_open: (_) => "|",
+        _free_open: (_) => "|",
         ...gen_verbatim_attached_modifier("verbatim", "`"),
         ...gen_verbatim_attached_modifier("comment", "%"),
         ...gen_verbatim_attached_modifier("math", "$"),
@@ -326,10 +337,10 @@ function gen_attached_modifier(type, mod) {
         );
     rules[type] = ($) =>
         seq(
-            $[type + "_open"],
+            d_alias($[type + "_open"], "_open"),
             $["_" + type + "_non_ws"],
-            $[type + "_close"],
-            optional($.attached_modifier_extension),
+            d_alias($[type + "_close"], "_close"),
+            optional(field("extension", $.attached_modifier_extension)),
         );
     return rules;
 }
@@ -346,7 +357,7 @@ function gen_free_attached_modifier(type) {
     rules["free_" + type + "_open"] = ($) =>
         prec.dynamic(
             PREC.free_form_standard_attached_modifier,
-            seq(alias($[type + "_open"], "open"), alias($.free_open, "open")),
+            seq(alias($[type + "_open"], "open"), $._free_open),
         );
     rules["_free_" + type + "_inline"] = ($) =>
         prec.right(
@@ -364,7 +375,7 @@ function gen_free_attached_modifier(type) {
         );
     rules["free_" + type] = ($) =>
         seq(
-            $["free_" + type + "_open"],
+            d_alias($["free_" + type + "_open"], "_open"),
             choice(
                 $.soft_break,
                 seq(
@@ -374,7 +385,7 @@ function gen_free_attached_modifier(type) {
                     optional($.soft_break),
                 ),
             ),
-            $["free_" + type + "_close"],
+            d_alias($["free_" + type + "_close"], "_close"),
             optional($.attached_modifier_extension),
         );
     return rules;
@@ -393,24 +404,22 @@ function gen_verbatim_attached_modifier(type, mod) {
     const _non_ws = "_" + type + "_non_ws";
     rules[type] = ($) =>
         seq(
-            $[type + "_open"],
+            d_alias($[type + "_open"], "_open"),
             $[_non_ws],
-            $[type + "_close"],
+            d_alias($[type + "_close"], "_close"),
             optional($.attached_modifier_extension),
         );
     rules[_non_ws] = ($) =>
         prec.right(
             choice(
-                choice(
-                    seq($.word, optional(alias($._open_conflict, $.punc))),
-                    $.punc,
-                    $.escape_sequence,
-                    alias("[", $.punc),
-                    alias("{", $.punc),
-                    prec.left(seq($[_non_ws], $[_non_ws])),
-                    prec.left(seq($[_non_ws], $.ws, $[_non_ws])),
-                    prec.left(seq($[_non_ws], $.soft_break, $[_non_ws])),
-                ),
+                seq($.word, optional(alias($._open_conflict, $.punc))),
+                $.punc,
+                $.escape_sequence,
+                alias("[", $.punc),
+                alias("{", $.punc),
+                prec.left(seq($[_non_ws], $[_non_ws])),
+                prec.left(seq($[_non_ws], $.ws, $[_non_ws])),
+                prec.left(seq($[_non_ws], $.soft_break, $[_non_ws])),
             ),
         );
     return rules;
@@ -427,7 +436,7 @@ function gen_free_verbatim_attached_modifier(type) {
     rules["free_" + type + "_open"] = ($) =>
         prec.dynamic(
             PREC.free_form_verbatim_attached_modifier,
-            seq(alias($[type + "_open"], "open"), alias($.free_open, "open")),
+            seq(alias($[type + "_open"], "open"), $._free_open),
         );
     rules["_free_" + type + "_inline"] = ($) =>
         prec.right(
@@ -441,7 +450,7 @@ function gen_free_verbatim_attached_modifier(type) {
         );
     rules["free_" + type] = ($) =>
         seq(
-            $["free_" + type + "_open"],
+            d_alias($["free_" + type + "_open"], "_open"),
             choice(
                 $.soft_break,
                 seq(
@@ -451,7 +460,7 @@ function gen_free_verbatim_attached_modifier(type) {
                     optional($.soft_break),
                 ),
             ),
-            $["free_" + type + "_close"],
+            d_alias($["free_" + type + "_close"], "_close"),
             optional($.attached_modifier_extension),
         );
     return rules;
