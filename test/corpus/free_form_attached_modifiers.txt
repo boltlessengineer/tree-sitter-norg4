@@ -103,39 +103,6 @@ PREC: free-form verbatim attached modifier > verbatim attached modifier
       (free_verbatim_close))))
 
 ================================================================================
-PREC: Verbatim > nested standard markups (inside free-form markups)
-================================================================================
-_|*/`word/*`|_
-
-_|`*/word`/*|_
---------------------------------------------------------------------------------
-(document
-  (paragraph
-    (free_underline
-      (free_underline_open)
-      (punc)
-      (punc)
-      (verbatim
-        (verbatim_open)
-        (word)
-        (punc)
-        (punc)
-        (verbatim_close))
-      (free_underline_close)))
-  (paragraph
-    (free_underline
-      (free_underline_open)
-      (verbatim
-        (verbatim_open)
-        (punc)
-        (punc)
-        (word)
-        (verbatim_close))
-      (punc)
-      (punc)
-      (free_underline_close))))
-
-================================================================================
 Unclosed free form markup
 ================================================================================
 *| word

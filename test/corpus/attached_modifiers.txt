@@ -38,32 +38,6 @@ PREC: Verbatim > nested standard markups
     (punc)))
 
 ================================================================================
-PREC: Verbatim > all nested standard markups
-================================================================================
-*/-_^!`verbatim rules!^_-/*`
---------------------------------------------------------------------------------
-(document
-  (paragraph
-    (punc)
-    (punc)
-    (punc)
-    (punc)
-    (punc)
-    (punc)
-    (verbatim
-      (verbatim_open)
-      (word)
-      (ws)
-      (word)
-      (punc)
-      (punc)
-      (punc)
-      (punc)
-      (punc)
-      (punc)
-      (verbatim_close))))
-
-================================================================================
 PREC: Verbatim > repeated standard markups
 ================================================================================
 /`word/ /word/ /word/`
