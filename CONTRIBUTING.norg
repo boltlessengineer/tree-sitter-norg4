@@ -1,0 +1,16 @@
+* Contributing
+
+all contributings are welcome.
+
+Please don't mind ignoring this repo and whole implementation. We need completely new parser algorithm to fix issues above.
+
+** Issues
+
+all failing test cases are in `test/corpus-failing/`
+
+You can help parser development by fixing issues below:
+
+- failing test cases caused by too much versions while parsing
+- tree-sitter needs to be fixed about it's dynamic precedence algorithm.
+  see this PR: {https://github.com/tree-sitter/tree-sitter/pull/2741}[tree-sitter#2741]
+

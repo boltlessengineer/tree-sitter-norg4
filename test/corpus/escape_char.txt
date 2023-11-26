@@ -50,3 +50,18 @@ Not valid inside free-form standard attached modifier
       (ws)
       (punc)
       (free_bold_close))))
+
+================================================================================
+Hard line break positioned at paragraph break
+================================================================================
+paragraph\
+* heading
+--------------------------------------------------------------------------------
+(document
+  (paragraph
+    (word)
+    (escape_sequence
+      (escape_char)))
+  (test_heading
+    (title
+      (word))))
