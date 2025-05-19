@@ -1,5 +1,7 @@
 * tree-sitter-norg4
 
+> This repo is discontinued. Check for {https://github.com/nvim-neorg/tree-sitter-norg3} repo instead.
+
 ** Implement state
    see {:todo:}
 
